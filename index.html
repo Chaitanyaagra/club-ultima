@@ -86,7 +86,7 @@
         .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
         .warning-box p { margin: 5px 0; font-size: 13px; font-weight: bold; color: #333; }
         
-        /* Restriction Error Box */
+        /* Restriction Error Box style */
         #age_restriction_error { display: none; background-color: #ffebee; border: 2px solid #d32f2f; color: #c62828; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 14px; margin: 15px 0; text-align: center; }
 
         .rules-container { background-color: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; max-height: 250px; overflow-y: scroll; margin-bottom: 20px; font-size: 12px; line-height: 1.6; }
@@ -157,8 +157,8 @@
 
     <div id="age_restriction_error">
         ⚠️ आयु प्रतिबंध त्रुटि (Age Restriction Error):<br>
-        Online form filling is restricted for children aged 12 years or below. Please contact the swimming pool supervisor for a physical form.<br>
-        <span style="font-weight: normal; font-size:12px; display:block; margin-top:5px;">12 वर्ष या उससे कम आयु के बच्चों के लिए ऑनलाइन फॉर्म भरना प्रतिबंधित है। कृपया स्विमिंग पूल सुपरवाइजर से भौतिक (फिजिकल) फॉर्म प्राप्त करें।</span>
+        Online form filling is restricted for children aged 12 years or below. Please fill the physical form available at the swimming pool supervisor.<br>
+        <span style="font-weight: normal; font-size:12px; display:block; margin-top:5px;">12 वर्ष या उससे कम आयु के बच्चों के लिए ऑनलाइन फॉर्म भरना प्रतिबंधित है। कृपया स्विमिंग पूल सुपरवाइजर के पास उपलब्ध भौतिक (Physical) फॉर्म भरें।</span>
     </div>
 
     <div id="recaptcha-container"></div>
@@ -409,32 +409,6 @@
         ctx.moveTo(pos.x, pos.y);
     }
 
-    // --- 4. Populate Flats Dynamic Logic ---
-    function populateFlats() {
-        const tower = document.getElementById("tower").value;
-        const flatSelect = document.getElementById("flat");
-        flatSelect.innerHTML = '<option value="">Select Flat (फ्लैट चुनें)</option>';
-        if (!tower) { flatSelect.disabled = true; return; }
-        flatSelect.disabled = false;
-        
-        let prefix = '', maxFloor = 13, flatsPerFloor = 6;
-        switch (tower) {
-            case 'Tower A': case 'Tower B': prefix = 'A'; break;
-            case 'Tower C': case 'Tower D': prefix = 'C'; flatsPerFloor = 4; break;
-            case 'Tower E': prefix = 'E'; flatsPerFloor = 5; break;
-            case 'Tower F': case 'Tower G': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
-        }
-        for (let floor = 0; floor <= maxFloor; floor++) {
-            for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
-                let flatStr = flatNum.toString().padStart(2, '0'); 
-                let finalFlat = prefix + floor.toString() + flatStr; 
-                let option = document.createElement("option");
-                option.value = finalFlat; option.text = finalFlat;
-                flatSelect.appendChild(option);
-            }
-        }
-    }
-
     function draw(e) {
         if (!drawing) return;
         e.preventDefault();
@@ -464,7 +438,33 @@
         return canvas.toDataURL() === blank.toDataURL();
     }
 
-    // --- 5. Check Age & Enforce Restriction with Pop-up Message ---
+    // --- 4. Dynamic Flat Logic ---
+    function populateFlats() {
+        const tower = document.getElementById("tower").value;
+        const flatSelect = document.getElementById("flat");
+        flatSelect.innerHTML = '<option value="">Select Flat (फ्लैट चुनें)</option>';
+        if (!tower) { flatSelect.disabled = true; return; }
+        flatSelect.disabled = false;
+        
+        let prefix = '', maxFloor = 13, flatsPerFloor = 6;
+        switch (tower) {
+            case 'Tower A': case 'Tower B': prefix = 'A'; break;
+            case 'Tower C': case 'Tower D': prefix = 'C'; flatsPerFloor = 4; break;
+            case 'Tower E': prefix = 'E'; flatsPerFloor = 5; break;
+            case 'Tower F': case 'Tower G': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
+        }
+        for (let floor = 0; floor <= maxFloor; floor++) {
+            for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
+                let flatStr = flatNum.toString().padStart(2, '0'); 
+                let finalFlat = prefix + floor.toString() + flatStr; 
+                let option = document.createElement("option");
+                option.value = finalFlat; option.text = finalFlat;
+                flatSelect.appendChild(option);
+            }
+        }
+    }
+
+    // --- 5. Check Age & Enforce Restriction with Pop-up Alert Box ---
     function getAgeFromDOB(dobValue) {
         if(!dobValue) return 0;
         const dob = new Date(dobValue); const today = new Date();
@@ -484,14 +484,14 @@
         const submitBtn = document.getElementById('submitBtn');
         const errorBox = document.getElementById('age_restriction_error');
         
-        // यदि उम्र 12 वर्ष या उससे कम है तो पॉप-अप अलर्ट दिखाएं और फॉर्म ब्लॉक करें
+        // यदि उम्र 12 वर्ष या उससे कम है तो पॉप-अप अलर्ट दिखाएं और ब्लॉक करें
         if (age <= 12) {
             errorBox.style.display = 'block';
             submitBtn.disabled = true;
             parentSection.style.display = 'none';
             
-            // नया अलर्ट पॉप-अप जो फिजिकल फॉर्म भरने की सलाह देता है
-            alert("❌ Restriction Alert:\nOnline form registration is blocked for children aged 12 years or below. Kindly fill the physical form available at the swimming pool supervisor.");
+            // नया डायनेमिक पॉप-अप अलर्ट मैसेज जैसा आपने निर्देशित किया था
+            alert("❌ Restriction Alert:\nOnline form filling is restricted for children aged 12 years or below. Please fill the physical form available at the swimming pool supervisor.");
             
             if(stream1) stream1.getTracks().forEach(t => t.stop());
             if(stream2) stream2.getTracks().forEach(t => t.stop());
@@ -552,7 +552,7 @@
 
         let age = getAgeFromDOB(dob);
         if (age <= 12) {
-            alert("❌ Submission Denied: 12 years or below must fill the physical form.");
+            alert("❌ Submission Denied: 12 years or below cannot fill this form online.");
             return;
         }
 
