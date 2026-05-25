@@ -96,6 +96,15 @@
         .checkbox-container label { font-size: 13px; font-weight: bold; cursor: pointer; color: #33691e; }
         .hindi-text { color: #555; display: block; margin-top: 2px; font-size: 11px; font-weight: normal;}
         
+        /* Camera & Signature Elements Style */
+        .camera-box { border: 2px solid #0288d1; border-radius: 10px; overflow: hidden; background: #000; position: relative; margin-bottom: 10px; max-width: 320px; margin: 0 auto 10px auto; }
+        .camera-box video { width: 100%; display: block; }
+        .selfie-preview { width: 100%; max-width: 180px; height: auto; border: 2px solid #4caf50; border-radius: 8px; display: none; margin: 5px auto; }
+        .signature-pad-container { border: 2px solid #0288d1; border-radius: 8px; background-color: #fff; position: relative; margin-top: 10px; }
+        .signature-pad-container canvas { width: 100%; height: 150px; display: block; cursor: crosshair; }
+        .clear-btn { background-color: #e53935; color: white; border: none; padding: 5px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-weight: bold; }
+        .cam-btn { background: #0288d1; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; display: block; margin: 5px auto; }
+
         .submit-btn { 
             width: 100%; 
             background: linear-gradient(to right, #01579b, #0288d1); 
@@ -187,16 +196,31 @@
             </div>
         </div>
         
-        <div class="form-group">
-            <label>Gender (लिंग) <span style="color:red;">*</span></label>
-            <select id="gender" required><option value="">Select</option><option value="Male">Male (पुरुष)</option><option value="Female">Female (महिला)</option></select>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Gender (लिंग) <span style="color:red;">*</span></label>
+                <select id="gender" required><option value="">Select</option><option value="Male">Male (पुरुष)</option><option value="Female">Female (महिला)</option></select>
+            </div>
+            <div class="form-group">
+                <label>Mobile No. <span style="color:red;">*</span></label>
+                <input type="tel" id="mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Mobile No" required>
+            </div>
         </div>
 
-        <div class="section-title">2. IDENTITY PROOF 🪪</div>
+        <div class="section-title">2. IDENTITY PROOF & LIVE SELFIE 🪪</div>
         <div class="form-group file-upload-box">
             <label style="color: #01579b; font-size: 14px;">Upload Your ID Proof (Aadhaar / Voter ID / DL) <span style="color:red;">*</span></label>
             <p style="font-size: 11px; color: red; margin: 5px 0;">Max File Size: 5MB (केवल 5MB तक की फोटो/PDF)</p>
             <input type="file" id="id_proof" accept="image/png, image/jpeg, application/pdf" required>
+        </div>
+
+        <div class="form-group" style="text-align: center; margin-top:15px;">
+            <label id="selfie_label" style="color: #01579b; font-size: 13px; font-weight: bold; margin-bottom:8px;">Take Live Selfie / लाइव सेल्फी लें <span style="color:red;">*</span></label>
+            <div class="camera-box" id="cam_box_1">
+                <video id="video_1" autoplay playsinline></video>
+            </div>
+            <button type="button" class="cam-btn" id="snap_btn_1" onclick="captureSelfie(1)">📸 Capture Selfie</button>
+            <img id="preview_1" class="selfie-preview" alt="Selfie Preview">
         </div>
 
         <div id="parent_section" style="display: none;">
@@ -230,35 +254,22 @@
                 <label>Parent / Guardian Mobile No. (OTP Verification Area) <span style="color:red;">*</span></label>
                 <input type="tel" id="parent_mobile" class="parent-input" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Number">
             </div>
-            <div class="form-group file-upload-box parent-upload">
+            <div class="form-group file-upload-box parent-upload" style="margin-bottom:15px;">
                 <label style="color: #e65100;">Upload Parent / Guardian ID Proof <span style="color:red;">*</span></label>
                 <input type="file" id="parent_id_proof" class="parent-input" accept="image/png, image/jpeg, application/pdf">
             </div>
-        </div>
 
-        <div class="section-title">3. CONTACT DETAILS 📞</div>
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Mobile No. <span style="color:red;">*</span></label>
-                <input type="tel" id="mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Mobile No" required>
-            </div>
-            <div class="form-group">
-                <label>Emergency Contact Name <span style="color:red;">*</span></label>
-                <input type="text" id="em_name" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Contact Person Name" required>
+            <div class="form-group" style="text-align: center;">
+                <label style="color: #e65100; font-size: 13px; font-weight: bold; margin-bottom:8px;">Take Parent / Guardian Live Selfie <span style="color:red;">*</span></label>
+                <div class="camera-box" id="cam_box_2">
+                    <video id="video_2" autoplay playsinline></video>
+                </div>
+                <button type="button" class="cam-btn" id="snap_btn_2" style="background:#e65100;" onclick="captureSelfie(2)">📸 Capture Parent Selfie</button>
+                <img id="preview_2" class="selfie-preview" alt="Parent Selfie Preview">
             </div>
         </div>
-        <div class="form-group">
-            <label>Emergency Mobile No. <span style="color:red;">*</span></label>
-            <input type="tel" id="em_mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Emergency No" required>
-        </div>
 
-        <div class="warning-box">
-            <h3>⚠️ IMPORTANT - PLEASE READ CAREFULLY</h3>
-            <p>THERE IS NO LIFE GUARD ON DUTY AT THE SWIMMING POOL.</p>
-            <p style="font-size:12px; font-weight:normal; color:#555;">स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है। स्विमिंग पूल का उपयोग पूर्णतः आपके अपने जोखिम पर है।</p>
-        </div>
-
-        <div class="section-title">4. TERMS & CONDITIONS (नियम एवं शर्तें) 📝</div>
+        <div class="section-title">3. TERMS & CONDITIONS (नियम एवं शर्तें) 📝</div>
         <div class="rules-container">
             <div class="rule-item"><strong>1.</strong> I / We acknowledge that there is <strong>NO LIFE GUARD ON DUTY</strong> at the swimming pool.<br><span class="hindi-text">मैं / हम स्वीकार करते हैं कि स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है।</span></div>
             <div class="rule-item"><strong>2.</strong> I / We understand that swimming and pool activities involve inherent risks, including the risk of serious injury or death, and I / We allow my / our child named above to use the swimming pool facilities at our own risk.<br><span class="hindi-text">मैं / हम समझते हैं कि स्विमिंग और पूल गतिविधियों में अंतर्निहित जोखिम शामिल हैं, जिनमें गंभीर चोट या मृत्यु का जोखिम भी शामिल है, और मैं / हम अपने उपर्युक्त बच्चे को स्विमिंग पूल की सुविधाओं का उपयोग अपने स्वयं के जोखिम पर करने की अनुमति देते हैं।</span></div>
@@ -276,9 +287,13 @@
                     <span class="hindi-text">मैं / हम ने ऊपर दी गई नियम एवं शर्तों को ध्यानपूर्वक पढ़ा और समझा है। मैं / हम स्वेच्छा से अपने बच्चे को स्विमिंग पूल की सुविधाओं का उपयोग अपने स्वयं के जोखिम पर करने के लिए सहमति प्रदान करते हैं। *</span>
                 </label>
             </div>
+            
             <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
-                <label>Signature of Parents / Resident (Type Full Name to Sign) <span style="color:red;">*</span></label>
-                <input type="text" id="digital_signature" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Type your Full Name to sign" required>
+                <label>Signature of Parents/Guardian/Resident (कृपया नीचे स्क्रीन पर हस्ताक्षर करें) <span style="color:red;">*</span></label>
+                <div class="signature-pad-container">
+                    <canvas id="signatureCanvas"></canvas>
+                </div>
+                <button type="button" class="clear-btn" onclick="clearSignature()">Clear Signature / साफ़ करें</button>
             </div>
         </div>
 
@@ -318,8 +333,107 @@
     });
 
     let confirmationResult = null;
+    let selfieDataUrl1 = null;
+    let selfieDataUrl2 = null;
 
-    // --- 2. Dynamic Flat Logic ---
+    // --- 2. Live Camera Init Logic ---
+    let stream1 = null, stream2 = null;
+    async function initCamera(camNum, videoId) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+            document.getElementById(videoId).srcObject = stream;
+            if(camNum === 1) stream1 = stream;
+            if(camNum === 2) stream2 = stream;
+        } catch (err) {
+            console.error("Camera access error: ", err);
+            alert("कैमरा एक्सेस करने में समस्या है। कृपया ब्राउज़र अनुमति की जांच करें।");
+        }
+    }
+
+    // ऑटोमेटिकली प्राइमरी कैमरा लोड करें
+    initCamera(1, 'video_1');
+
+    function captureSelfie(camNum) {
+        const video = document.getElementById(`video_${camNum}`);
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        document.getElementById(`preview_${camNum}`).src = dataUrl;
+        document.getElementById(`preview_${camNum}`).style.display = 'block';
+        document.getElementById(`cam_box_${camNum}`).style.display = 'none';
+        document.getElementById(`snap_btn_${camNum}`).innerHTML = "🔄 Retake Selfie";
+        
+        if(camNum === 1) { selfieDataUrl1 = dataUrl; }
+        if(camNum === 2) { selfieDataUrl2 = dataUrl; }
+    }
+
+    // --- 3. Digital Signature Drawing Logic ---
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    // रीसाइजिंग और स्केल फिक्स
+    function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        ctx.scale(ratio, ratio);
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#003399';
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 500);
+
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDrawing(e) {
+        e.preventDefault();
+        drawing = true;
+        const pos = getMousePos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const pos = getMousePos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDrawing() { drawing = false; }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+
+    function clearSignature() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        resizeCanvas();
+    }
+
+    function isCanvasBlank() {
+        const blank = document.createElement('canvas');
+        blank.width = canvas.width;
+        blank.height = canvas.height;
+        return canvas.toDataURL() === blank.toDataURL();
+    }
+
+    // --- 4. Dynamic Flat Logic ---
     function populateFlats() {
         const tower = document.getElementById("tower").value;
         const flatSelect = document.getElementById("flat");
@@ -327,15 +441,12 @@
         if (!tower) { flatSelect.disabled = true; return; }
         flatSelect.disabled = false;
         
-        let prefix = '', maxFloor = 0, flatsPerFloor = 0;
+        let prefix = '', maxFloor = 13, flatsPerFloor = 6;
         switch (tower) {
-            case 'Tower A': prefix = 'A'; maxFloor = 13; flatsPerFloor = 6; break;
-            case 'Tower B': prefix = 'B'; maxFloor = 13; flatsPerFloor = 6; break;
-            case 'Tower C': prefix = 'C'; maxFloor = 13; flatsPerFloor = 4; break;
-            case 'Tower D': prefix = 'D'; maxFloor = 13; flatsPerFloor = 4; break;
-            case 'Tower E': prefix = 'E'; maxFloor = 13; flatsPerFloor = 5; break;
-            case 'Tower F': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
-            case 'Tower G': prefix = 'G'; maxFloor = 12; flatsPerFloor = 4; break;
+            case 'Tower A': case 'Tower B': prefix = 'A'; break;
+            case 'Tower C': case 'Tower D': prefix = 'C'; flatsPerFloor = 4; break;
+            case 'Tower E': prefix = 'E'; flatsPerFloor = 5; break;
+            case 'Tower F': case 'Tower G': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
         }
         for (let floor = 0; floor <= maxFloor; floor++) {
             for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
@@ -348,7 +459,7 @@
         }
     }
 
-    // --- 3. Check Age ---
+    // --- 5. Check Age ---
     function getAgeFromDOB(dobValue) {
         if(!dobValue) return 0;
         const dob = new Date(dobValue); const today = new Date();
@@ -367,14 +478,17 @@
         
         if (age < 18) {
             parentSection.style.display = 'block';
+            document.getElementById('selfie_label').innerHTML = "Take Minor Live Selfie / बच्चे की लाइव सेल्फी लें <span style='color:red;'>*</span>";
+            initCamera(2, 'video_2'); // पैरेंट का कैमरा चालू करें
         } else {
             parentSection.style.display = 'none';
+            document.getElementById('selfie_label').innerHTML = "Take Live Selfie / लाइव सेल्फी लें <span style='color:red;'>*</span>";
             parentInputs.forEach(input => { input.value = ''; });
             document.getElementById('other_relation_box').style.display = 'none';
+            if(stream2) { stream2.getTracks().forEach(track => track.stop()); }
         }
     }
 
-    // 1. Toggle Function for "Other" relation option
     function toggleOtherRelation() {
         const relationSelect = document.getElementById('parent_relation').value;
         const otherBox = document.getElementById('other_relation_box');
@@ -390,7 +504,6 @@
         }
     }
 
-    // --- 4. Generate ID ---
     function generateUniqueID() {
         let lastNumber = localStorage.getItem('clubUltimaFormCounter') || 0;
         lastNumber = parseInt(lastNumber) + 1;
@@ -398,7 +511,7 @@
         return "MHM" + lastNumber.toString().padStart(3, '0');
     }
 
-    // --- 5. Intercept Submit and Send OTP ---
+    // --- 6. Intercept Submit and Send OTP ---
     async function handleFormSubmission(event) {
         event.preventDefault();
 
@@ -408,25 +521,23 @@
         const flat = document.getElementById('flat').value;
         const gender = document.getElementById('gender').value;
         const mobile = document.getElementById('mobile').value.trim();
-        const emName = document.getElementById('em_name').value.trim();
-        const emMobile = document.getElementById('em_mobile').value.trim();
         const consentChecked = document.getElementById('consent_check').checked;
-        const signature = document.getElementById('digital_signature').value.trim();
         const idProofInput = document.getElementById('id_proof');
         const idProofFile = idProofInput.files.length > 0 ? idProofInput.files[0] : null;
 
-        if (!name || !dob || !tower || !flat || !gender || !mobile || !emName || !emMobile || !signature) {
+        if (!name || !dob || !tower || !flat || !gender || !mobile) {
             alert("⚠ Error: Please fill all mandatory fields."); return;
         }
         if (!idProofFile) { alert("⚠ Error: Please upload ID Proof."); return; }
+        if (!selfieDataUrl1) { alert("⚠ Error: Live Selfie is mandatory."); return; }
+        if (isCanvasBlank()) { alert("⚠ Error: Signature is mandatory."); return; }
         if (!consentChecked) { alert("⚠ Error: Please agree to terms."); return; }
 
         const validMobileRegex = /^[06789]\d{9}$/;
         if (!validMobileRegex.test(mobile)) { alert("⚠ Error: Invalid Mobile Number."); return; }
-        if (!validMobileRegex.test(emMobile)) { alert("⚠ Error: Invalid Emergency Mobile Number."); return; }
 
         let age = getAgeFromDOB(dob);
-        let finalVerificationMobile = mobile; // Default Target
+        let finalVerificationMobile = mobile;
         let isMinorMode = age < 18;
 
         if (isMinorMode) {
@@ -439,13 +550,9 @@
             if (pRelation === 'Other' && !document.getElementById('other_relation_input').value.trim()) {
                 alert("⚠ Error: Please specify the relation."); return;
             }
+            if (!selfieDataUrl2) { alert("⚠ Error: Parent/Guardian Live Selfie is mandatory."); return; }
             
-            // 2. Minor Mode active: Change final OTP routing target to parent mobile
             finalVerificationMobile = pMobile;
-        }
-
-        if (name.toLowerCase() !== signature.toLowerCase()) {
-            alert("⚠ Error: Digital Signature must match your Full Name."); return;
         }
 
         const submitBtn = document.getElementById('submitBtn');
@@ -456,8 +563,6 @@
             auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
                 .then((result) => {
                     confirmationResult = result;
-                    
-                    // 2. Dynamic alert texts depending on destination routing
                     if(isMinorMode) {
                         alert("📲 OTP sent successfully to Parent Mobile Number: " + finalVerificationMobile);
                         submitBtn.innerHTML = "OTP Sent to Parent Mobile ✅";
@@ -480,12 +585,10 @@
         });
     }
 
-    // --- 6. Verify OTP ---
     async function verifyOTP() {
         const code = document.getElementById('otp_code').value.trim();
         if (!code || code.length !== 6) {
-            alert("⚠ Please enter a valid 6-digit OTP.");
-            return;
+            alert("⚠ Please enter a valid 6-digit OTP."); return;
         }
 
         const verifyBtn = document.querySelector("#otpSection button");
@@ -510,15 +613,16 @@
         const flat = document.getElementById('flat').value;
         const gender = document.getElementById('gender').value;
         const mobile = document.getElementById('mobile').value.trim();
-        const emName = document.getElementById('em_name').value.trim();
-        const emMobile = document.getElementById('em_mobile').value.trim();
         const idProofInput = document.getElementById('id_proof');
         const idProofFile = idProofInput.files[0];
         
         const currentDate = new Date().toISOString().split('T')[0];
+        const signatureImgBase64 = canvas.toDataURL(); // सिग्नेचर इमेज डेटा
 
         let age = getAgeFromDOB(dob);
         let parentFileURL = "";
+        let selfieUrl1 = "";
+        let selfieUrl2 = "";
         let fatherName = document.getElementById('father_name').value.trim() || "N/A";
         let parentMobile = document.getElementById('parent_mobile').value.trim() || "N/A";
         let parentRelation = document.getElementById('parent_relation').value || "N/A";
@@ -533,17 +637,28 @@
             const newFormID = generateUniqueID(); 
             submitBtn.innerHTML = "1/3 Uploading Data... ⏳";
 
+            // 1. Upload ID Proof
             const storageRef = storage.ref(`id_proofs/${newFormID}_${idProofFile.name}`);
             const snapshot = await storageRef.put(idProofFile);
             const fileURL = await snapshot.ref.getDownloadURL();
 
+            // 2. Upload Live Selfie 1
+            const selfieRef1 = storage.ref(`selfies/${newFormID}_resident.jpg`);
+            const selfieSnap1 = await selfieRef1.putString(selfieDataUrl1, 'data_url');
+            selfieUrl1 = await selfieSnap1.ref.getDownloadURL();
+
             if (age < 18) {
+                // Upload Parent ID Proof
                 const pIdProofFile = document.getElementById('parent_id_proof').files[0];
                 if(pIdProofFile) {
                     const pStorageRef = storage.ref(`parent_id_proofs/${newFormID}_${pIdProofFile.name}`);
                     const pSnapshot = await pStorageRef.put(pIdProofFile);
                     parentFileURL = await pSnapshot.ref.getDownloadURL();
                 }
+                // Upload Parent Selfie
+                const selfieRef2 = storage.ref(`selfies/${newFormID}_parent.jpg`);
+                const selfieSnap2 = await selfieRef2.putString(selfieDataUrl2, 'data_url');
+                selfieUrl2 = await selfieSnap2.ref.getDownloadURL();
             }
 
             submitBtn.innerHTML = "2/3 Saving to Database... ⏳";
@@ -556,18 +671,23 @@
                 tower: tower,
                 gender: gender,
                 mobile: mobile,
-                emergency_contact: emName,
-                emergency_mobile: emMobile,
                 guardian_name: fatherName,
                 parent_mobile: parentMobile,
                 parent_relation: parentRelation,
                 id_proof_url: fileURL,
+                selfie_resident_url: selfieUrl1,
+                selfie_parent_url: selfieUrl2,
                 parent_id_proof_url: parentFileURL,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
             submitBtn.innerHTML = "3/3 Generating PDF... ⏳";
+
+            // कैमरे के ट्रैक बंद करें
+            if(stream1) stream1.getTracks().forEach(t => t.stop());
+            if(stream2) stream2.getTracks().forEach(t => t.stop());
             
+            // सेल्फ़ियों के रेंडरिंग के साथ इमेज लेआउट मैचिंग पीडीएफ
             const pdfHtmlContent = `
                 <div style="padding: 20px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #111; background: #fff; max-width: 750px; margin: 0 auto; box-sizing: border-box; border: 3px solid #003399; border-radius: 10px;">
                     
@@ -588,6 +708,19 @@
 
                     <div style="background-color: #e1f5fe; border: 1px dashed #0288d1; padding: 8px; text-align: center; font-weight: bold; color: #01579b; font-size: 14px; margin-bottom: 15px; border-radius: 4px;">
                         OFFICIAL REGISTRATION ID: ${newFormID}
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="display: inline-block; margin: 0 10px; text-align: center;">
+                            <img src="${selfieDataUrl1}" style="width: 110px; height: 110px; border: 1px solid #003399; object-fit: cover; border-radius: 4px;">
+                            <span style="font-size: 10px; display: block; font-weight: bold; color: #003399; margin-top:2px;">Resident / Minor Selfie</span>
+                        </div>
+                        ${age < 18 ? `
+                        <div style="display: inline-block; margin: 0 10px; text-align: center;">
+                            <img src="${selfieDataUrl2}" style="width: 110px; height: 110px; border: 1px solid #2e7d32; object-fit: cover; border-radius: 4px;">
+                            <span style="font-size: 10px; display: block; font-weight: bold; color: #2e7d32; margin-top:2px;">Parent / Guardian Selfie</span>
+                        </div>
+                        ` : ''}
                     </div>
 
                     <div style="background-color: #003399; color: white; padding: 6px 12px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 10px;">
@@ -617,8 +750,7 @@
                             <td style="padding: 5px; width: 50%;"><strong>Relation (संबंध):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentRelation}</span></td>
                         </tr>
                         <tr>
-                            <td style="padding: 5px;"><strong>Parent Mobile No:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentMobile}</span></td>
-                            <td style="padding: 5px;"><strong>Emergency Contact:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${emName} (${emMobile})</span></td>
+                            <td style="padding: 5px;" colspan="2"><strong>Parent Mobile No:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentMobile}</span></td>
                         </tr>
                     </table>
 
@@ -641,19 +773,20 @@
                     </div>
 
                     <div style="border-top: 2px solid #003399; padding-top: 10px; margin-top: 15px;">
-                        <p style="font-size: 10.5px; line-height: 1.4; color: #333; font-style: italic; margin: 0 0 15px 0;">
-                            <strong>DECLARATION (घोषणा):</strong> I / We have read and understood the terms. I voluntarily give consent to use swimming pool facilities at our own risk. (मैंने ऊपर दी गई सभी नियम एवं शर्तों को पढ़ा और समझा है। मैं स्वेच्छा से स्वयं/बच्चे के लिए सहमति प्रदान करता हूँ।)
+                        <p style="font-size: 10.5px; line-height: 1.4; color: #333; font-style: italic; margin: 0 0 10px 0;">
+                            <strong>DECLARATION (घोषणा):</strong> I / We have read and understood the terms. I voluntarily give consent to use swimming pool facilities at our own risk. (ने ऊपर दी गई सभी नियम एवं शर्तों को पढ़ा और समझा है। मैं स्वेच्छा से सहमति प्रदान करता हूँ।)
                         </p>
                         
                         <table style="width: 100%; font-size: 12px;">
                             <tr>
-                                <td style="width: 50%; text-align: left; vertical-align: bottom;">
-                                    <strong>Date (दिनांक):</strong> <span style="border-bottom: 1px dashed #333;">${currentDate}</span>
+                                <td style="width: 55%; text-align: left; vertical-align: bottom;">
+                                    <strong>Date (दिनांक):</strong> <span style="border-bottom: 1px dashed #333;">${currentDate}</span><br><br>
+                                    <span style="font-size: 11px; color: #555; font-weight: bold; display:block; margin-bottom:2px;">Verified Digitally Via Mobile OTP</span>
+                                    <span style="font-size: 10px; color: #777;">IP Logged & Safe Verified Transaction</span>
                                 </td>
-                                <td style="width: 50%; text-align: right; border: 1px solid #b3e5fc; padding: 10px; background-color: #f1f8e9; border-radius: 6px;">
-                                    <span style="font-size: 11px; color: #555; display: block; font-weight: bold;">Verified Digitally Via Mobile OTP</span>
-                                    <strong style="font-size: 15px; color: #01579b; font-family: 'Courier New', monospace; display: block; margin-top: 4px; text-transform: uppercase;">/s/ ${name}</strong>
-                                    <span style="font-size: 10px; color: #999; display: block; margin-top: 2px;">Signature of Parent / Resident</span>
+                                <td style="width: 45%; text-align: right; border: 1px solid #ccc; padding: 5px; background-color: #fff; border-radius: 4px;">
+                                    <span style="font-size: 10px; color: #555; display: block; text-align:center; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:2px; margin-bottom:4px;">Signature of Parents/Guardian/Resident</span>
+                                    <img src="${signatureImgBase64}" style="width: 100%; max-height: 75px; object-fit: contain; display: block; margin: 0 auto;">
                                 </td>
                             </tr>
                         </table>
