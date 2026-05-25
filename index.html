@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swimming Pool Consent Form</title>
+    <title>Swimming Pool Consent Form - Club Ultima</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
@@ -73,10 +73,7 @@
             background-color: #fcfcfc; 
             transition: all 0.3s ease;
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #0288d1;
-            outline: none;
-        }
+        .form-group input:focus, .form-group select:focus { border-color: #0288d1; outline: none; }
         .form-group select:disabled { background-color: #e9ecef; cursor: not-allowed; border-color: #ccc; }
         
         .file-upload-box { border: 2px dashed #0288d1; padding: 15px; text-align: center; border-radius: 8px; background-color: #e1f5fe; }
@@ -86,8 +83,12 @@
         @media (min-width: 600px) { .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; } }
         
         .warning-box { border: 2px solid #d32f2f; background-color: #ffebee; padding: 15px; text-align: center; margin: 20px 0; border-radius: 8px; }
-        .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; }
+        .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
         .warning-box p { margin: 5px 0; font-size: 13px; font-weight: bold; color: #333; }
+        
+        .rules-container { background-color: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; max-height: 250px; overflow-y: scroll; margin-bottom: 20px; font-size: 12px; line-height: 1.6; }
+        .rule-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+        .rule-item strong { color: #d32f2f; }
         
         .declaration { background-color: #f1f8e9; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #c5e1a5; }
         .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 15px; }
@@ -199,16 +200,29 @@
         </div>
 
         <div id="parent_section" style="display: none;">
-            <div class="section-title parent-bg">PARENTS DETAILS 👨‍👩‍👦 <span style="color:white;">*</span></div>
+            <div class="section-title parent-bg">PARENTS / GUARDIAN DETAILS 👨‍👩‍👦 <span style="color:white;">*</span></div>
             <div class="grid-2">
                 <div class="form-group">
-                    <label>Father's Name <span style="color:red;">*</span></label>
+                    <label>Father's / Guardian Name <span style="color:red;">*</span></label>
                     <input type="text" id="father_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
                 </div>
                 <div class="form-group">
                     <label>Mother's Name <span style="color:red;">*</span></label>
                     <input type="text" id="mother_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
                 </div>
+            </div>
+            <div class="form-group">
+                <label>Relation with Minor Child (संबंध) <span style="color:red;">*</span></label>
+                <select id="parent_relation" class="parent-input">
+                    <option value="">Select Relation</option>
+                    <option value="Father">Father (पिता)</option>
+                    <option value="Mother">Mother (माता)</option>
+                    <option value="Grandfather">Grandfather (दादा)</option>
+                    <option value="Grandmother">Grandmother (दादी)</option>
+                    <option value="Uncle">Uncle (चाचा)</option>
+                    <option value="Aunt">Aunt (चाची)</option>
+                    <option value="Other">Other (अन्य)</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>Parent's Mobile No. <span style="color:red;">*</span></label>
@@ -223,7 +237,7 @@
         <div class="section-title">3. CONTACT DETAILS 📞</div>
         <div class="grid-2">
             <div class="form-group">
-                <label>Mobile No. <span style="color:red;">*</span></label>
+                <label>Mobile No. (OTP Verification) <span style="color:red;">*</span></label>
                 <input type="tel" id="mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Mobile No" required>
             </div>
             <div class="form-group">
@@ -237,21 +251,31 @@
         </div>
 
         <div class="warning-box">
-            <h3>⚠ IMPORTANT SAFETY NOTICE</h3>
+            <h3>⚠️ IMPORTANT - PLEASE READ CAREFULLY</h3>
             <p>THERE IS NO LIFE GUARD ON DUTY AT THE SWIMMING POOL.</p>
+            <p style="font-size:12px; font-weight:normal; color:#555;">स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है। स्विमिंग पूल का उपयोग पूर्णतः आपके अपने जोखिम पर है।</p>
         </div>
 
-        <div class="section-title">4. TERMS & CONDITIONS 📝</div>
+        <div class="section-title">4. TERMS & CONDITIONS (नियम एवं शर्तें) 📝</div>
+        <div class="rules-container">
+            <div class="rule-item"><strong>1.</strong> I / We acknowledge that there is <strong>NO LIFE GUARD ON DUTY</strong> at the swimming pool.<br><span class="hindi-text">मैं / हम स्वीकार करते हैं कि स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है।</span></div>
+            <div class="rule-item"><strong>2.</strong> I / We understand that swimming and pool activities involve inherent risks, including the risk of serious injury or death, and I / We allow my / our child named above to use the swimming pool facilities at our own risk.<br><span class="hindi-text">मैं / हम समझते हैं कि स्विमिंग और पूल गतिविधियों में अंतर्निहित जोखिम शामिल हैं, जिनमें गंभीर चोट या मृत्यु का जोखिम भी शामिल है, और मैं / हम अपने उपर्युक्त बच्चे को स्विमिंग पूल की सुविधाओं का उपयोग अपने स्वयं के जोखिम पर करने की अनुमति देते हैं।</span></div>
+            <div class="rule-item"><strong>3.</strong> I / We agree that the RWA Committee and PAAS SIKAR LOGISTICS LLP, its partners, employees, agents or representatives shall not be liable for any accident, injury, illness, drowning or loss of life arising out of or in connection with the use of the swimming pool.<br><span class="hindi-text">मैं / हम सहमत हैं कि RWA समिति और PAAS SIKAR LOGISTICS LLP, उसके साझेदारों, कर्मचारियों, एजेंटों या प्रतिनिधियों को स्विमिंग पूल के उपयोग से संबंधित या उससे उत्पन्न किसी भी दुर्घटना, चोट, बीमारी, डूबने या जीवन की हानि के लिए उत्तरदायी नहीं ठहराया जाएगा।</span></div>
+            <div class="rule-item"><strong>4.</strong> I / We shall ensure that my / our child follows all the pool rules and instructions displayed at the premises and behaves responsibly at all times. We also agree that RWA Committee and PAAS SIKAR LOGISTICS LLP shall not be liable for any incident.<br><span class="hindi-text">मैं / हम सुनिश्चित करेंगे कि मेरा / हमारा बच्चा परिसर में प्रदर्शित सभी पूल नियमों और निर्देशों का पालन करे और हर समय जिम्मेदारी से व्यवहार करे। हम यह भी सहमत हैं कि RWA समिति और PAAS SIKAR LOGISTICS LLP किसी भी घटना के लिए उत्तरदायी नहीं होंगे।</span></div>
+            <div class="rule-item"><strong>5.</strong> I / We agree to indemnify and hold harmless the RWA Committee and PAAS SIKAR LOGISTICS LLP, its partners, employees, agents or representatives from any claim, damage, liability or expense arising out of the use of the swimming pool by my / our child.<br><span class="hindi-text">मैं / हम सहमत हैं कि मेरे / हमारे बच्चे द्वारा स्विमिंग पूल के उपयोग से उत्पन्न किसी भी दावा, क्षति, देयता या खर्च से RWA समिति और PAAS SIKAR LOGISTICS LLP, उसके साझेदारों, कर्मचारियों, एजेंटों या प्रतिनिधियों को क्षतिपूर्ति देंगे और उन्हें हानिरहित रखेंगे।</span></div>
+            <div class="rule-item"><strong>6.</strong> This consent is valid for today's visit only and we agree that the RWA Committee and PAAS SIKAR LOGISTICS LLP shall not be liable for any untoward incident.<br><span class="hindi-text">यह सहमति केवल आज की विजिट के लिए मान्य है और हम सहमत हैं कि RWA समिति और PAAS SIKAR LOGISTICS LLP किसी भी अप्रिय घटना के लिए उत्तरदायी नहीं होंगे।</span></div>
+        </div>
+
         <div class="declaration">
             <div class="checkbox-container">
                 <input type="checkbox" id="consent_check" required>
                 <label for="consent_check">
-                    I have read, understood, and agree to the safety terms and conditions. <span style="color:red;">*</span><br>
-                    <span class="hindi-text">मैं नियमों और शर्तों से सहमत हूँ।</span>
+                    I / We have read and understood the above terms and conditions carefully. I / We voluntarily give consent for myself / my child to use swimming pool facilities at our own risk.<br>
+                    <span class="hindi-text">मैं / हम ने ऊपर दी गई नियम एवं शर्तों को ध्यानपूर्वक पढ़ा और समझा है। मैं / हम स्वेच्छा से अपने बच्चे को स्विमिंग पूल की सुविधाओं का उपयोग अपने स्वयं के जोखिम पर करने के लिए सहमति प्रदान करते हैं। *</span>
                 </label>
             </div>
             <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
-                <label>Digital Signature (Type Full Name) <span style="color:red;">*</span></label>
+                <label>Signature of Parents / Resident (Type Full Name to Sign) <span style="color:red;">*</span></label>
                 <input type="text" id="digital_signature" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Type your Full Name to sign" required>
             </div>
         </div>
@@ -282,6 +306,9 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
     const auth = firebase.auth();
+
+    // Hostname dynamic config fix to bypass the 'Hostname match not found' error
+    auth.config.authDomain = window.location.hostname;
 
     document.getElementById('date').valueAsDate = new Date();
 
@@ -339,9 +366,7 @@
         const parentInputs = document.querySelectorAll('.parent-input');
         
         if (age < 13) {
-            alert("Sorry, you must be at least 13 years old.");
-            document.getElementById('dob').value = '';
-            parentSection.style.display = 'none';
+            parentSection.style.display = 'block';
         } else if (age >= 13 && age < 18) {
             parentSection.style.display = 'block';
         } else {
@@ -384,15 +409,13 @@
         const validMobileRegex = /^[06789]\d{9}$/;
         if (!validMobileRegex.test(mobile)) { alert("⚠ Error: Invalid Mobile Number."); return; }
         if (!validMobileRegex.test(emMobile)) { alert("⚠ Error: Invalid Emergency Mobile Number."); return; }
-        if (mobile === emMobile) { alert("⚠ Error: Mobile and Emergency numbers cannot be the same."); return; }
 
         let age = getAgeFromDOB(dob);
-        if (age >= 13 && age < 18) {
+        if (age < 18) {
             const fName = document.getElementById('father_name').value.trim();
-            const mName = document.getElementById('mother_name').value.trim();
             const pMobile = document.getElementById('parent_mobile').value.trim();
-            if (!fName || !mName || !pMobile) { alert("⚠ Error: Parent details missing."); return; }
-            if (!validMobileRegex.test(pMobile)) { alert("⚠ Error: Invalid Parent Mobile Number."); return; }
+            const pRelation = document.getElementById('parent_relation').value;
+            if (!fName || !pMobile || !pRelation) { alert("⚠ Error: Parent/Guardian details missing."); return; }
         }
 
         if (name.toLowerCase() !== signature.toLowerCase()) {
@@ -447,7 +470,7 @@
         });
     }
 
-    // --- 7. Final Form Submission & Mobile-Friendly PDF Generation ---
+    // --- 7. Final Form Submission & Image Style Matching PDF Generation ---
     async function executeFinalFormSubmission() {
         const name = document.getElementById('name').value.trim();
         const dob = document.getElementById('dob').value;
@@ -463,6 +486,11 @@
 
         let age = getAgeFromDOB(dob);
         let parentFileURL = "";
+        let fatherName = document.getElementById('father_name').value.trim() || "N/A";
+        let motherName = document.getElementById('mother_name').value.trim() || "N/A";
+        let parentMobile = document.getElementById('parent_mobile').value.trim() || "N/A";
+        let parentRelation = document.getElementById('parent_relation').value || "N/A";
+        
         const submitBtn = document.getElementById('submitBtn');
 
         try {
@@ -473,7 +501,7 @@
             const snapshot = await storageRef.put(idProofFile);
             const fileURL = await snapshot.ref.getDownloadURL();
 
-            if (age >= 13 && age < 18) {
+            if (age < 18) {
                 const pIdProofFile = document.getElementById('parent_id_proof').files[0];
                 if(pIdProofFile) {
                     const pStorageRef = storage.ref(`parent_id_proofs/${newFormID}_${pIdProofFile.name}`);
@@ -494,6 +522,10 @@
                 mobile: mobile,
                 emergency_contact: emName,
                 emergency_mobile: emMobile,
+                father_name: fatherName,
+                mother_name: motherName,
+                parent_mobile: parentMobile,
+                parent_relation: parentRelation,
                 id_proof_url: fileURL,
                 parent_id_proof_url: parentFileURL,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -501,54 +533,101 @@
 
             submitBtn.innerHTML = "3/3 Generating PDF... 📄";
             
-            // सुधरा हुआ मोबाइल फ्रेंडली पीडीएफ लॉजिक (बिना हिडन कंटेनर के सीधे स्ट्रिंग पास करना)
+            // Image design rules layout implementation for Mobile PDF
             const pdfHtmlContent = `
-                <div style="padding: 25px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #222; background: #fff; max-width: 700px; margin: 0 auto; box-sizing: border-box;">
-                    <div style="text-align: center; border-bottom: 3px double #0288d1; padding-bottom: 12px; margin-bottom: 25px;">
-                        <h1 style="color: #01579b; margin: 0 0 5px 0; font-size: 26px; font-weight: bold; letter-spacing: 1px;">CLUB ULTIMA</h1>
-                        <h2 style="color: #0288d1; margin: 5px 0; font-size: 16px; font-weight: 600; letter-spacing: 0.5px;">SWIMMING POOL CONSENT RECEIPT</h2>
-                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #777; text-transform: uppercase;">Managed by PAAS SIKAR LOGISTICS LLP</p>
-                    </div>
+                <div style="padding: 20px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #111; background: #fff; max-width: 750px; margin: 0 auto; box-sizing: border-box; border: 3px solid #003399; border-radius: 10px;">
                     
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 14px;">
+                    <table style="width: 100%; border-bottom: 3px solid #003399; padding-bottom: 10px; margin-bottom: 15px;">
                         <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555; font-weight: bold; width: 40%;">Registration ID:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #0288d1; font-weight: bold; font-size: 16px;">${newFormID}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555;">Date:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${currentDate}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555;">Resident Name:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 500; text-transform: uppercase;">${name}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555;">Tower & Flat No:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${tower} - ${flat}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555;">Mobile Number:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${mobile}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; color: #555;">Emergency Contact:</td>
-                            <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; font-weight: 500;">${emName} (${emMobile})</td>
+                            <td style="width: 70%; text-align: left;">
+                                <h1 style="color: #003399; margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 1px;">CLUB ULTIMA</h1>
+                                <h2 style="color: #003399; margin: 4px 0; font-size: 18px; font-weight: bold;">SWIMMING POOL CONSENT FORM</h2>
+                                <h3 style="color: #003399; margin: 2px 0; font-size: 15px; font-weight: bold;">क्लब स्विमिंग पूल सहमति पत्र</h3>
+                                <p style="margin: 4px 0 0 0; font-size: 12px; color: #333; font-weight: bold;">Date / दिनांक : <span style="font-weight: normal; text-decoration: underline;">${currentDate}</span></p>
+                            </td>
+                            <td style="width: 30%; text-align: right; vertical-align: top;">
+                                <div style="background-color: #003399; color: white; padding: 6px 10px; font-size: 11px; font-weight: bold; display: inline-block; border-radius: 4px; text-align: center; margin-bottom: 8px;">CLUB NAME<br><span style="font-size:13px;">CLUB ULTIMA</span></div>
+                                <div style="font-size: 10px; font-weight: bold; color: #333; text-transform: uppercase;">MANAGED BY<br>PAAS SIKAR LOGISTICS LLP</div>
+                            </td>
                         </tr>
                     </table>
 
-                    <div style="margin-top: 30px; padding: 18px; border: 1px dashed #d32f2f; background-color: #fffde7; border-radius: 6px;">
-                        <h4 style="color: #d32f2f; margin: 0 0 8px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">⚠️ Safety Declaration & Acknowledgment</h4>
-                        <p style="font-size: 12px; line-height: 1.6; margin: 0; color: #444; text-align: justify;">
-                            I hereby acknowledge that I have read, understood, and voluntarily agreed to all the rules, terms, and safety regulations regarding the use of the swimming pool. I am completely aware that <strong>THERE IS NO LIFE GUARD ON DUTY</strong> at the pool area, and I (or my ward) will be utilizing the facility entirely at my own risk and responsibility.
-                        </p>
+                    <div style="background-color: #e1f5fe; border: 1px dashed #0288d1; padding: 8px; text-align: center; font-weight: bold; color: #01579b; font-size: 14px; margin-bottom: 15px; border-radius: 4px;">
+                        OFFICIAL REGISTRATION ID: ${newFormID}
                     </div>
 
-                    <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #eee; text-align: right;">
-                        <p style="margin: 0; font-size: 14px; color: #111; font-weight: bold;">Digitally Signed By:</p>
-                        <p style="margin: 5px 0 0 0; font-size: 16px; color: #01579b; font-family: 'Courier New', Courier, monospace; font-weight: bold; text-transform: uppercase;">/s/ ${name}</p>
-                        <p style="margin: 2px 0 0 0; font-size: 11px; color: #999;">Verified via Registered Mobile OTP</p>
+                    <div style="background-color: #003399; color: white; padding: 6px 12px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 10px;">
+                        1. CHILD / RESIDENT DETAILS (बच्चे / निवासी का विवरण)
                     </div>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; line-height: 1.7;">
+                        <tr>
+                            <td style="padding: 5px; width: 50%;"><strong>Name of Applicant (नाम):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px; text-transform:uppercase;">${name}</span></td>
+                            <td style="padding: 5px; width: 50%;"><strong>Age / DOB (आयु):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${age} Years (${dob})</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>Flat / Unit No. (फ्लैट नं.):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${flat}</span></td>
+                            <td style="padding: 5px;"><strong>Tower / Block (टावर):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${tower}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>Gender (लिंग):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${gender}</span></td>
+                            <td style="padding: 5px;"><strong>Mobile No (मोबाइल नं.):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${mobile}</span></td>
+                        </tr>
+                    </table>
+
+                    <div style="background-color: #2e7d32; color: white; padding: 6px 12px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 10px;">
+                        2. PARENTS / GUARDIAN DETAILS (माता-पिता / अभिभावक का विवरण)
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; line-height: 1.7;">
+                        <tr>
+                            <td style="padding: 5px; width: 50%;"><strong>Father / Guardian Name:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${fatherName}</span></td>
+                            <td style="padding: 5px; width: 50%;"><strong>Mother Name:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${motherName}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"><strong>Relation (संबंध):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentRelation}</span></td>
+                            <td style="padding: 5px;"><strong>Parent Mobile No:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentMobile}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;" colspan="2"><strong>Emergency Contact Person:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${emName} (${emMobile})</span></td>
+                        </tr>
+                    </table>
+
+                    <div style="border: 2px solid #d32f2f; background-color: #ffebee; padding: 10px; text-align: center; margin-bottom: 15px; border-radius: 6px;">
+                        <h4 style="color: #d32f2f; margin: 0 0 4px 0; font-size: 13px; font-weight: bold; text-transform: uppercase;">⚠️ IMPORTANT - PLEASE READ CAREFULLY</h4>
+                        <p style="margin: 0; font-size: 12px; font-weight: bold; color: #111;">THERE IS NO LIFE GUARD ON DUTY AT THE SWIMMING POOL.</p>
+                        <p style="margin: 3px 0 0 0; font-size: 11px; color: #d32f2f; font-weight: bold;">स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है। पूल का उपयोग पूर्णतः आपके अपने जोखिम पर है।</p>
+                    </div>
+
+                    <div style="background-color: #003399; color: white; padding: 6px 12px; font-size: 13px; font-weight: bold; border-radius: 4px; margin-bottom: 10px;">
+                        3. TERMS & CONDITIONS (नियम एवं शर्तें)
+                    </div>
+                    <div style="font-size: 10px; line-height: 1.4; color: #222; text-align: justify; margin-bottom: 15px; border: 1px solid #ccc; padding: 8px; background-color: #fafafa; border-radius: 4px;">
+                        <div style="margin-bottom:6px;"><strong>1.</strong> I / We acknowledge that there is NO LIFE GUARD ON DUTY at the swimming pool. (मैं / हम स्वीकार करते हैं कि स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है।)</div>
+                        <div style="margin-bottom:6px;"><strong>2.</strong> I / We understand that swimming activities involve inherent risks, including serious injury or death, and use facilities at our own risk. (स्विमिंग गतिविधियों में अंतर्निहित जोखिम शामिल हैं, जिनमें गंभीर चोट या मृत्यु शामिल है।)</div>
+                        <div style="margin-bottom:6px;"><strong>3.</strong> RWA Committee & PAAS SIKAR LOGISTICS LLP shall not be liable for any accident, injury, drowning or loss of life. (RWA समिति और PAAS SIKAR LOGISTICS LLP किसी भी दुर्घटना, चोट या जीवन की हानि के लिए उत्तरदायी नहीं होंगे।)</div>
+                        <div style="margin-bottom:6px;"><strong>4.</strong> I / We shall ensure that all rules are followed and behave responsibly at all times. (मैं / हम सुनिश्चित करेंगे कि परिसर में प्रदर्शित सभी पूल नियमों और निर्देशों का पूरी तरह पालन किया जाए।)</div>
+                        <div style="margin-bottom:6px;"><strong>5.</strong> I / We agree to indemnify and hold harmless the management from any claim, damage or liability. (मैं / हम प्रबंधन को सभी प्रकार के दावों, क्षति, देयता या खर्च से मुक्त और हानिरहित रखने के लिए उत्तरदायी हैं।)</div>
+                        <div><strong>6.</strong> This consent is valid for today's visit only. (यह सहमति पत्र केवल आज की विजिट के लिए ही पूर्ण रूप से मान्य है।)</div>
+                    </div>
+
+                    <div style="border-top: 2px solid #003399; padding-top: 10px; margin-top: 15px;">
+                        <p style="font-size: 10.5px; line-height: 1.4; color: #333; font-style: italic; margin: 0 0 15px 0;">
+                            <strong>DECLARATION (घोषणा):</strong> I / We have read and understood the terms. I voluntarily give consent to use swimming pool facilities at our own risk. (मैंने ऊपर दी गई सभी नियम एवं शर्तों को पढ़ा और समझा है। मैं स्वेच्छा से स्वयं/बच्चे के लिए सहमति प्रदान करता हूँ।)
+                        </p>
+                        
+                        <table style="width: 100%; font-size: 12px;">
+                            <tr>
+                                <td style="width: 50%; text-align: left; vertical-align: bottom;">
+                                    <strong>Date (दिनांक):</strong> <span style="border-bottom: 1px dashed #333;">${currentDate}</span>
+                                </td>
+                                <td style="width: 50%; text-align: right; border: 1px solid #b3e5fc; padding: 10px; background-color: #f1f8e9; border-radius: 6px;">
+                                    <span style="font-size: 11px; color: #555; display: block; font-weight: bold;">Verified Digitally Via Mobile OTP</span>
+                                    <strong style="font-size: 15px; color: #01579b; font-family: 'Courier New', monospace; display: block; margin-top: 4px; text-transform: uppercase;">/s/ ${name}</strong>
+                                    <span style="font-size: 10px; color: #999; display: block; margin-top: 2px;">Signature of Parent / Resident</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
                 </div>
             `;
 
@@ -560,7 +639,7 @@
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
             };
             
-            // बिना DOM ओपेरेशन के सीधे HTML स्ट्रिंग को कनवर्ट करना
+            // Generate PDF directly via String
             await html2pdf().set(opt).from(pdfHtmlContent).save();
 
             // Show Success UI
