@@ -110,8 +110,15 @@
         }
         .submit-btn:disabled { background: #90a4ae; cursor: not-allowed; box-shadow: none; }
         
-        /* OTP Box Styles */
-        .otp-container { background-color: #fff9c4; border: 2px dashed #fbc02d; padding: 15px; border-radius: 10px; margin-top: 20px; display: none; }
+        /* OTP Box Styles - डिफ़ॉल्ट रूप से छिपा रहेगा */
+        .otp-container { 
+            background-color: #fff9c4; 
+            border: 2px dashed #fbc02d; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-top: 20px; 
+            display: none; 
+        }
 
         #success_message { display: none; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 25px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
         .unique-id-display { font-size: 28px; font-weight: bold; color: #0288d1; background: #fff; padding: 15px; border-radius: 10px; display: inline-block; margin: 15px 0; border: 2px dashed #0288d1; }
@@ -408,8 +415,16 @@
             .then((result) => {
                 confirmationResult = result;
                 alert("📲 OTP sent successfully to " + mobile);
-                // सुधरा हुआ कोड - अब बॉक्स सही ढंग से दिखाई देगा
-                document.getElementById('otpSection').style.display = 'block';
+                
+                // जबरदस्ती बॉक्स दिखाने के लिए बैकअप लॉजिक (मजबूत CSS इंजेक्शन के साथ)
+                var otpBox = document.getElementById('otpSection');
+                if(otpBox) {
+                    otpBox.style.setProperty('display', 'block', 'important');
+                    otpBox.scrollIntoView({ behavior: 'smooth' }); // स्क्रीन स्क्रॉल करके सीधे ओटीपी सेक्शन पर ले जाएगा
+                } else {
+                    alert("ओटीपी बॉक्स कोड में नहीं मिला!");
+                }
+
                 submitBtn.innerHTML = "OTP Sent ✅ (Complete verification below)";
             }).catch((error) => {
                 console.error("OTP Error: ", error);
