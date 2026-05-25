@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Swimming Pool Consent Form</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Firebase core SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <!-- Firebase Auth SDK added for OTP -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%);
+            margin: 0; 
+            padding: 15px; 
+            min-height: 100vh;
+        }
+        
+        .form-container { 
+            max-width: 650px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            padding: 0px 20px 25px 20px; 
+            border-top: 10px solid #0288d1; 
+            border-bottom: 10px solid #0288d1;
+            border-radius: 20px; 
+            box-shadow: 0 15px 30px rgba(0, 131, 199, 0.2); 
+            overflow: hidden;
+            background-image: radial-gradient(#e1f5fe 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .header { 
+            text-align: center; 
+            background: linear-gradient(to right, #01579b, #0288d1);
+            color: white; 
+            padding: 25px 15px; 
+            margin: 0 -20px 25px -20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 { margin: 0 0 5px; font-size: 26px; letter-spacing: 1px; text-transform: uppercase; }
+        .header h2 { margin: 5px 0; font-size: 18px; font-weight: 400; }
+        .header h3 { margin: 5px 0 0; font-size: 14px; color: #b3e5fc; font-weight: normal; }
+        .managed-by { font-size: 11px; font-weight: bold; color: #e1f5fe; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+
+        .section-title { 
+            background: linear-gradient(45deg, #0288d1, #29b6f6);
+            color: white; 
+            padding: 10px 15px; 
+            font-size: 15px; 
+            font-weight: bold; 
+            border-radius: 25px; 
+            margin-top: 25px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 4px rgba(2, 136, 209, 0.3);
+        }
+        .section-title.parent-bg { background: linear-gradient(45deg, #e65100, #ff9800); box-shadow: 0 2px 4px rgba(230, 81, 0, 0.3); }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #01579b; }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #b3e5fc; 
+            border-radius: 8px; 
+            font-size: 15px; 
+            background-color: #fcfcfc; 
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0288d1;
+            outline: none;
+        }
+        .form-group select:disabled { background-color: #e9ecef; cursor: not-allowed; border-color: #ccc; }
+        
+        .file-upload-box { border: 2px dashed #0288d1; padding: 15px; text-align: center; border-radius: 8px; background-color: #e1f5fe; }
+        .file-upload-box.parent-upload { border-color: #e65100; background-color: #fff3e0; }
+        .file-upload-box input[type="file"] { background-color: transparent; border: none; padding: 0; margin-top: 10px; font-size: 14px; }
+        
+        @media (min-width: 600px) { .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; } }
+        
+        .warning-box { border: 2px solid #d32f2f; background-color: #ffebee; padding: 15px; text-align: center; margin: 20px 0; border-radius: 8px; }
+        .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; }
+        .warning-box p { margin: 5px 0; font-size: 13px; font-weight: bold; color: #333; }
+        
+        .declaration { background-color: #f1f8e9; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #c5e1a5; }
+        .checkbox-container { display: flex; align-items: flex-start; margin-bottom: 15px; }
+        .checkbox-container input { width: 22px; height: 22px; margin-right: 12px; cursor: pointer; }
+        .checkbox-container label { font-size: 13px; font-weight: bold; cursor: pointer; color: #33691e; }
+        .hindi-text { color: #555; display: block; margin-top: 2px; font-size: 11px; font-weight: normal;}
+        
+        .submit-btn { 
+            width: 100%; 
+            background: linear-gradient(to right, #01579b, #0288d1); 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 30px; 
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(2, 136, 209, 0.4);
+        }
+        .submit-btn:disabled { background: #90a4ae; cursor: not-allowed; box-shadow: none; }
+        
+        /* OTP Box Styles */
+        .otp-container { background-color: #fff9c4; border: 2px dashed #fbc02d; padding: 15px; border-radius: 10px; margin-top: 20px; display: none; }
+
+        #success_message { display: none; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 25px; text-align: center; border-radius: 10px; margin-bottom: 20px; }
+        .unique-id-display { font-size: 28px; font-weight: bold; color: #0288d1; background: #fff; padding: 15px; border-radius: 10px; display: inline-block; margin: 15px 0; border: 2px dashed #0288d1; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <div class="header">
+        <div class="managed-by">MANAGED BY PAAS SIKAR LOGISTICS LLP</div>
+        <h1>🏊‍♂️ CLUB ULTIMA 🌊</h1>
+        <h2>SWIMMING POOL CONSENT FORM</h2>
+        <h3>स्विमિંગ પૂલ સહમતિ પત્ર</h3>
+    </div>
+
+    <div id="success_message">
+        <h2>🎉 फॉर्म सफलतापूर्वक जमा हो गया है!</h2>
+        <p>धन्यवाद, <span id="display_name" style="font-weight:bold;"></span>.</p>
+        <p>आपकी विशिष्ट पंजीकरण आईडी (Registration ID) है:</p>
+        <div class="unique-id-display" id="display_id"></div>
+        <p>📄 एक पीडीएफ रसीद आपके डिवाइस पर डाउनलोड हो गई है।</p>
+        <p class="hindi-text">कृपया भविष्य के संदर्भ के लिए इस आईडी को सुरक्षित रखें।</p>
+        <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 12px 25px; border-radius: 20px;">दूसरा फॉर्म भरें</button>
+    </div>
+
+    <!-- Invisible Firebase reCAPTCHA Container -->
+    <div id="recaptcha-container"></div>
+
+    <form id="consentForm" onsubmit="handleFormSubmission(event)" novalidate>
+        
+        <div class="form-group">
+            <label>Today's Date / आज की दिनांक <span style="color:red;">*</span></label>
+            <input type="date" id="date" required readonly style="background-color: #eeeeee;">
+        </div>
+
+        <div class="section-title">1. RESIDENT DETAILS 👤</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Full Name (पूरा नाम) <span style="color:red;">*</span></label>
+                <input type="text" id="name" required oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Enter Full Name">
+            </div>
+            <div class="form-group">
+                <label>Date of Birth (जन्म तिथि) <span style="color:red;">*</span></label>
+                <input type="date" id="dob" onchange="checkAge()" required>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Tower / Block 🏢 <span style="color:red;">*</span></label>
+                <select id="tower" onchange="populateFlats()" required>
+                    <option value="">Select Tower (टावर चुनें)</option>
+                    <option value="Tower A">Tower A</option>
+                    <option value="Tower B">Tower B</option>
+                    <option value="Tower C">Tower C</option>
+                    <option value="Tower D">Tower D</option>
+                    <option value="Tower E">Tower E</option>
+                    <option value="Tower F">Tower F</option>
+                    <option value="Tower G">Tower G</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Flat / Unit No. 🚪 <span style="color:red;">*</span></label>
+                <select id="flat" required disabled>
+                    <option value="">Select Tower First</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Gender (लिंग) <span style="color:red;">*</span></label>
+            <select id="gender" required><option value="">Select</option><option value="Male">Male (पुरुष)</option><option value="Female">Female (महिला)</option></select>
+        </div>
+
+        <div class="section-title">2. IDENTITY PROOF 🪪</div>
+        <div class="form-group file-upload-box">
+            <label style="color: #01579b; font-size: 14px;">Upload Your ID Proof (Aadhaar / Voter ID / DL) <span style="color:red;">*</span></label>
+            <p style="font-size: 11px; color: red; margin: 5px 0;">Max File Size: 5MB (केवल 5MB तक की फोटो/PDF)</p>
+            <input type="file" id="id_proof" accept="image/png, image/jpeg, application/pdf" required>
+        </div>
+
+        <div id="parent_section" style="display: none;">
+            <div class="section-title parent-bg">PARENTS DETAILS 👨‍👩‍👦 <span style="color:white;">*</span></div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Father's Name <span style="color:red;">*</span></label>
+                    <input type="text" id="father_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label>Mother's Name <span style="color:red;">*</span></label>
+                    <input type="text" id="mother_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Parent's Mobile No. <span style="color:red;">*</span></label>
+                <input type="tel" id="parent_mobile" class="parent-input" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Number">
+            </div>
+            <div class="form-group file-upload-box parent-upload">
+                <label style="color: #e65100;">Upload Parent's ID Proof <span style="color:red;">*</span></label>
+                <input type="file" id="parent_id_proof" class="parent-input" accept="image/png, image/jpeg, application/pdf">
+            </div>
+        </div>
+
+        <div class="section-title">3. CONTACT DETAILS 📞</div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Mobile No. <span style="color:red;">*</span></label>
+                <input type="tel" id="mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Mobile No" required>
+            </div>
+            <div class="form-group">
+                <label>Emergency Contact Name <span style="color:red;">*</span></label>
+                <input type="text" id="em_name" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Contact Person Name" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Emergency Mobile No. <span style="color:red;">*</span></label>
+            <input type="tel" id="em_mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Emergency No" required>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠ IMPORTANT SAFETY NOTICE</h3>
+            <p>THERE IS NO LIFE GUARD ON DUTY AT THE SWIMMING POOL.</p>
+        </div>
+
+        <div class="section-title">4. TERMS & CONDITIONS 📝</div>
+        <div class="declaration">
+            <div class="checkbox-container">
+                <input type="checkbox" id="consent_check" required>
+                <label for="consent_check">
+                    I have read, understood, and agree to the safety terms and conditions. <span style="color:red;">*</span><br>
+                    <span class="hindi-text">मैं नियमों और शर्तों से सहमत हूँ।</span>
+                </label>
+            </div>
+            <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
+                <label>Digital Signature (Type Full Name) <span style="color:red;">*</span></label>
+                <input type="text" id="digital_signature" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Type your Full Name to sign" required>
+            </div>
+        </div>
+
+        <!-- OTP Input Section (Hidden Initially) -->
+        <div class="otp-container" id="otpSection">
+            <div class="form-group" style="margin-bottom: 5px;">
+                <label style="color: #f57f17; font-size: 14px;">Enter 6-Digit OTP / ६-अंकों का ओटीपी दर्ज करें <span style="color:red;">*</span></label>
+                <input type="tel" id="otp_code" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Enter 6 Digit OTP">
+            </div>
+            <button type="button" class="submit-btn" onclick="verifyOTP()" style="background: linear-gradient(to right, #fbc02d, #f57f17); margin-top: 10px; padding: 10px; font-size: 15px;">🔒 Verify OTP & Submit Form</button>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">🏊‍♂️ Submit Consent Form 🌊</button>
+    </form>
+</div>
+
+<script>
+    // --- 1. Firebase Initialization ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFepRlnHgfjyCpmDtW7ovF_vGQ4blCL7k",
+      authDomain: "club-ultima.firebaseapp.com",
+      projectId: "club-ultima",
+      storageBucket: "club-ultima.firebasestorage.app",
+      messagingSenderId: "942405392960",
+      appId: "1:942405392960:web:63df8788cd1c82e734dda5"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    const auth = firebase.auth();
+
+    document.getElementById('date').valueAsDate = new Date();
+
+    // Setup Invisible reCAPTCHA for Firebase Phone Auth
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible',
+        'callback': (response) => { /* Ready to send OTP */ }
+    });
+
+    let confirmationResult = null;
+
+    // --- 2. Dynamic Flat Logic ---
+    function populateFlats() {
+        const tower = document.getElementById("tower").value;
+        const flatSelect = document.getElementById("flat");
+        flatSelect.innerHTML = '<option value="">Select Flat (फ्लैट चुनें)</option>';
+        if (!tower) { flatSelect.disabled = true; return; }
+        flatSelect.disabled = false;
+        
+        let prefix = '', maxFloor = 0, flatsPerFloor = 0;
+        switch (tower) {
+            case 'Tower A': prefix = 'A'; maxFloor = 13; flatsPerFloor = 6; break;
+            case 'Tower B': prefix = 'B'; maxFloor = 13; flatsPerFloor = 6; break;
+            case 'Tower C': prefix = 'C'; maxFloor = 13; flatsPerFloor = 4; break;
+            case 'Tower D': prefix = 'D'; maxFloor = 13; flatsPerFloor = 4; break;
+            case 'Tower E': prefix = 'E'; maxFloor = 13; flatsPerFloor = 5; break;
+            case 'Tower F': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
+            case 'Tower G': prefix = 'G'; maxFloor = 12; flatsPerFloor = 4; break;
+        }
+        for (let floor = 0; floor <= maxFloor; floor++) {
+            for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
+                let flatStr = flatNum.toString().padStart(2, '0'); 
+                let finalFlat = prefix + floor.toString() + flatStr; 
+                let option = document.createElement("option");
+                option.value = finalFlat; option.text = finalFlat;
+                flatSelect.appendChild(option);
+            }
+        }
+    }
+
+    // --- 3. Check Age ---
+    function getAgeFromDOB(dobValue) {
+        if(!dobValue) return 0;
+        const dob = new Date(dobValue); const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) { age--; }
+        return age;
+    }
+    
+    function checkAge() {
+        const dobInput = document.getElementById('dob').value;
+        if(!dobInput) return;
+        let age = getAgeFromDOB(dobInput);
+        const parentSection = document.getElementById('parent_section');
+        const parentInputs = document.querySelectorAll('.parent-input');
+        
+        if (age < 13) {
+            alert("Sorry, you must be at least 13 years old.");
+            document.getElementById('dob').value = '';
+            parentSection.style.display = 'none';
+        } else if (age >= 13 && age < 18) {
+            parentSection.style.display = 'block';
+        } else {
+            parentSection.style.display = 'none';
+            parentInputs.forEach(input => { input.value = ''; });
+        }
+    }
+
+    // --- 4. Generate ID ---
+    function generateUniqueID() {
+        let lastNumber = localStorage.getItem('clubUltimaFormCounter') || 0;
+        lastNumber = parseInt(lastNumber) + 1;
+        localStorage.setItem('clubUltimaFormCounter', lastNumber);
+        return "MHM" + lastNumber.toString().padStart(3, '0');
+    }
+
+    // --- 5. Intercept Submit and Send OTP ---
+    async function handleFormSubmission(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const dob = document.getElementById('dob').value;
+        const tower = document.getElementById('tower').value;
+        const flat = document.getElementById('flat').value;
+        const gender = document.getElementById('gender').value;
+        const mobile = document.getElementById('mobile').value.trim();
+        const emName = document.getElementById('em_name').value.trim();
+        const emMobile = document.getElementById('em_mobile').value.trim();
+        const consentChecked = document.getElementById('consent_check').checked;
+        const signature = document.getElementById('digital_signature').value.trim();
+        const idProofInput = document.getElementById('id_proof');
+        const idProofFile = idProofInput.files.length > 0 ? idProofInput.files[0] : null;
+
+        // Form Validations
+        if (!name || !dob || !tower || !flat || !gender || !mobile || !emName || !emMobile || !signature) {
+            alert("⚠ Error: Please fill all mandatory fields."); return;
+        }
+        if (!idProofFile) { alert("⚠ Error: Please upload ID Proof."); return; }
+        if (!consentChecked) { alert("⚠ Error: Please agree to terms."); return; }
+
+        const validMobileRegex = /^[06789]\d{9}$/;
+        if (!validMobileRegex.test(mobile)) { alert("⚠ Error: Invalid Mobile Number."); return; }
+        if (!validMobileRegex.test(emMobile)) { alert("⚠ Error: Invalid Emergency Mobile Number."); return; }
+        if (mobile === emMobile) { alert("⚠ Error: Mobile and Emergency numbers cannot be the same."); return; }
+
+        let age = getAgeFromDOB(dob);
+        if (age >= 13 && age < 18) {
+            const fName = document.getElementById('father_name').value.trim();
+            const mName = document.getElementById('mother_name').value.trim();
+            const pMobile = document.getElementById('parent_mobile').value.trim();
+            if (!fName || !mName || !pMobile) { alert("⚠ Error: Parent details missing."); return; }
+            if (!validMobileRegex.test(pMobile)) { alert("⚠ Error: Invalid Parent Mobile Number."); return; }
+        }
+
+        if (name.toLowerCase() !== signature.toLowerCase()) {
+            alert("⚠ Error: Digital Signature must match your Full Name."); return;
+        }
+
+        // Trigger OTP Sending
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerHTML = "Sending OTP... ⏳";
+        submitBtn.disabled = true;
+
+        // Convert Indian standard 10 digit number to international format (+91)
+        const phoneNumber = "+91" + mobile;
+        const appVerifier = window.recaptchaVerifier;
+
+        auth.signInWithPhoneNumber(phoneNumber, appVerifier)
+            .then((result) => {
+                confirmationResult = result;
+                alert("📲 OTP sent successfully to " + mobile);
+                document.getElementById('otpSection').style.style.display = 'block';
+                submitBtn.innerHTML = "OTP Sent ✅ (Complete verification below)";
+            }).catch((error) => {
+                console.error("OTP Error: ", error);
+                alert("❌ Failed to send OTP: " + error.message);
+                submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
+                submitBtn.disabled = false;
+            });
+    }
+
+    // --- 6. Verify OTP and Execute Final Form Post ---
+    async function verifyOTP() {
+        const code = document.getElementById('otp_code').value.trim();
+        if (!code || code.length !== 6) {
+            alert("⚠ Please enter a valid 6-digit OTP.");
+            return;
+        }
+
+        const verifyBtn = document.querySelector("#otpSection button");
+        verifyBtn.innerHTML = "Verifying... ⏳";
+        verifyBtn.disabled = true;
+
+        confirmationResult.confirm(code).then((result) => {
+            // Verification successful, proceed to submit form data
+            executeFinalFormSubmission();
+        }).catch((error) => {
+            console.error("Verification Error: ", error);
+            alert("❌ Invalid OTP. Please try again.");
+            verifyBtn.innerHTML = "🔒 Verify OTP & Submit Form";
+            verifyBtn.disabled = false;
+        });
+    }
+
+    // --- 7. Final Form Submission (Original Logic) ---
+    async function executeFinalFormSubmission() {
+        const name = document.getElementById('name').value.trim();
+        const dob = document.getElementById('dob').value;
+        const tower = document.getElementById('tower').value;
+        const flat = document.getElementById('flat').value;
+        const gender = document.getElementById('gender').value;
+        const mobile = document.getElementById('mobile').value.trim();
+        const emName = document.getElementById('em_name').value.trim();
+        const emMobile = document.getElementById('em_mobile').value.trim();
+        const idProofInput = document.getElementById('id_proof');
+        const idProofFile = idProofInput.files[0];
+
+        let age = getAgeFromDOB(dob);
+        let parentFileURL = "";
+        const submitBtn = document.getElementById('submitBtn');
+
+        try {
+            const newFormID = generateUniqueID(); 
+            
+            submitBtn.innerHTML = "1/3 Uploading Data... ⏳";
+
+            const storageRef = storage.ref(`id_proofs/${newFormID}_${idProofFile.name}`);
+            const snapshot = await storageRef.put(idProofFile);
+            const fileURL = await snapshot.ref.getDownloadURL();
+
+            if (age >= 13 && age < 18) {
+                const pIdProofFile = document.getElementById('parent_id_proof').files[0];
+                if(pIdProofFile) {
+                    const pStorageRef = storage.ref(`parent_id_proofs/${newFormID}_${pIdProofFile.name}`);
+                    const pSnapshot = await pStorageRef.put(pIdProofFile);
+                    parentFileURL = await pSnapshot.ref.getDownloadURL();
+                }
+            }
+
+            submitBtn.innerHTML = "2/3 Saving to Database... ⏳";
+            await db.collection("consent_forms").doc(newFormID).set({
+                form_id: newFormID,
+                date: document.getElementById('date').value,
+                resident_name: name,
+                dob: dob,
+                flat_no: flat,
+                tower: tower,
+                gender: gender,
+                mobile: mobile,
+                emergency_contact: emName,
+                emergency_mobile: emMobile,
+                id_proof_url: fileURL,
+                parent_id_proof_url: parentFileURL,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            submitBtn.innerHTML = "3/3 Generating PDF... 📄";
+            
+            // Generate PDF logic
+            const pdfContainer = document.createElement("div");
+            pdfContainer.style.position = "absolute";
+            pdfContainer.style.left = "-9999px";
+            pdfContainer.style.top = "0";
+            
+            pdfContainer.innerHTML = `
+                <div style="width: 800px; padding: 40px; font-family: Arial, sans-serif; color: #333; background: #fff; box-sizing: border-box;">
+                    <div style="text-align: center; border-bottom: 2px solid #003399; padding-bottom: 10px; margin-bottom: 20px;">
+                        <h2 style="color: #003399; margin: 0; font-size: 24px;">CLUB ULTIMA</h2>
+                        <h3 style="color: #555; margin: 5px 0; font-size: 16px;">SWIMMING POOL CONSENT RECEIPT</h3>
+                    </div>
+                    <div style="margin-bottom: 15px; font-size: 16px; line-height: 1.8;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <strong>Registration ID:</strong> <span>${newFormID}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <strong>Date:</strong> <span>${document.getElementById('date').value}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <strong>Resident Name:</strong> <span>${name}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <strong>Flat / Tower:</strong> <span>${flat} / ${tower}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <strong>Mobile No:</strong> <span>${mobile}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 40px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+                        <p style="font-size: 14px; line-height: 1.6; margin: 0;">
+                            <strong>Declaration:</strong> I acknowledge that I have read and accepted all terms and conditions regarding swimming pool safety. I understand there is no life guard on duty and I am using the pool at my own risk.
+                        </p>
+                        <p style="margin-top: 20px; font-size: 15px;"><strong>Digitally Signed By:</strong> ${name}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(pdfContainer);
+
+            const opt = { 
+                margin: 0.5, 
+                filename: `Consent_Form_${newFormID}.pdf`, 
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true }, 
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
+            };
+            
+            await html2pdf().set(opt).from(pdfContainer).save();
+            document.body.removeChild(pdfContainer);
+
+            // Show Success UI
+            document.getElementById('consentForm').style.display = 'none';
+            document.getElementById('success_message').style.display = 'block';
+            document.getElementById('display_name').innerText = name;
+            document.getElementById('display_id').innerText = newFormID;
+
+        } catch (error) {
+            console.error("Error: ", error);
+            alert(`Error: ${error.message}`);
+            submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
+            submitBtn.disabled = false;
+            document.querySelector("#otpSection button").disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
