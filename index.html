@@ -7,11 +7,9 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- Firebase core SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-    <!-- Firebase Auth SDK added for OTP -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
@@ -126,7 +124,7 @@
         <div class="managed-by">MANAGED BY PAAS SIKAR LOGISTICS LLP</div>
         <h1>🏊‍♂️ CLUB ULTIMA 🌊</h1>
         <h2>SWIMMING POOL CONSENT FORM</h2>
-        <h3>स्विमિંગ પૂલ સહમતિ પત્ર</h3>
+        <h3>स्विमिंग पूल सहमति पत्र</h3>
     </div>
 
     <div id="success_message">
@@ -139,7 +137,6 @@
         <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 12px 25px; border-radius: 20px;">दूसरा फॉर्म भरें</button>
     </div>
 
-    <!-- Invisible Firebase reCAPTCHA Container -->
     <div id="recaptcha-container"></div>
 
     <form id="consentForm" onsubmit="handleFormSubmission(event)" novalidate>
@@ -253,7 +250,6 @@
             </div>
         </div>
 
-        <!-- OTP Input Section (Hidden Initially) -->
         <div class="otp-container" id="otpSection">
             <div class="form-group" style="margin-bottom: 5px;">
                 <label style="color: #f57f17; font-size: 14px;">Enter 6-Digit OTP / ६-अंकों का ओटीपी दर्ज करें <span style="color:red;">*</span></label>
@@ -412,7 +408,8 @@
             .then((result) => {
                 confirmationResult = result;
                 alert("📲 OTP sent successfully to " + mobile);
-                document.getElementById('otpSection').style.style.display = 'block';
+                // सुधरा हुआ कोड - अब बॉक्स सही ढंग से दिखाई देगा
+                document.getElementById('otpSection').style.display = 'block';
                 submitBtn.innerHTML = "OTP Sent ✅ (Complete verification below)";
             }).catch((error) => {
                 console.error("OTP Error: ", error);
@@ -513,26 +510,26 @@
                     </div>
                     <div style="margin-bottom: 15px; font-size: 16px; line-height: 1.8;">
                         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
-                            <strong>Registration ID:</strong> <span>${newFormID}</span>
+                            <strong>Registration ID:</strong> <span>\${newFormID}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
-                            <strong>Date:</strong> <span>${document.getElementById('date').value}</span>
+                            <strong>Date:</strong> <span>\${document.getElementById('date').value}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
-                            <strong>Resident Name:</strong> <span>${name}</span>
+                            <strong>Resident Name:</strong> <span>\${name}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
-                            <strong>Flat / Tower:</strong> <span>${flat} / ${tower}</span>
+                            <strong>Flat / Tower:</strong> <span>\${flat} / \${tower}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 10px 0;">
-                            <strong>Mobile No:</strong> <span>${mobile}</span>
+                            <strong>Mobile No:</strong> <span>\${mobile}</span>
                         </div>
                     </div>
                     <div style="margin-top: 40px; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
                         <p style="font-size: 14px; line-height: 1.6; margin: 0;">
                             <strong>Declaration:</strong> I acknowledge that I have read and accepted all terms and conditions regarding swimming pool safety. I understand there is no life guard on duty and I am using the pool at my own risk.
                         </p>
-                        <p style="margin-top: 20px; font-size: 15px;"><strong>Digitally Signed By:</strong> ${name}</p>
+                        <p style="margin-top: 20px; font-size: 15px;"><strong>Digitally Signed By:</strong> \${name}</p>
                     </div>
                 </div>
             `;
@@ -541,7 +538,7 @@
 
             const opt = { 
                 margin: 0.5, 
-                filename: `Consent_Form_${newFormID}.pdf`, 
+                filename: `Consent_Form_\${newFormID}.pdf`, 
                 image: { type: 'jpeg', quality: 0.98 }, 
                 html2canvas: { scale: 2, useCORS: true }, 
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
@@ -558,7 +555,7 @@
 
         } catch (error) {
             console.error("Error: ", error);
-            alert(`Error: ${error.message}`);
+            alert(`Error: \${error.message}`);
             submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
             submitBtn.disabled = false;
             document.querySelector("#otpSection button").disabled = false;
