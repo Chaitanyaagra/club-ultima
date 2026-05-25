@@ -86,7 +86,6 @@
         .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
         .warning-box p { margin: 5px 0; font-size: 13px; font-weight: bold; color: #333; }
         
-        /* Restriction Error Box style */
         #age_restriction_error { display: none; background-color: #ffebee; border: 2px solid #d32f2f; color: #c62828; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 14px; margin: 15px 0; text-align: center; }
 
         .rules-container { background-color: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; max-height: 250px; overflow-y: scroll; margin-bottom: 20px; font-size: 12px; line-height: 1.6; }
@@ -99,13 +98,14 @@
         .checkbox-container label { font-size: 13px; font-weight: bold; cursor: pointer; color: #33691e; }
         .hindi-text { color: #555; display: block; margin-top: 2px; font-size: 11px; font-weight: normal;}
         
-        .camera-box { border: 2px solid #0288d1; border-radius: 10px; overflow: hidden; background: #000; position: relative; margin-bottom: 10px; max-width: 320px; margin: 0 auto 10px auto; }
-        .camera-box video { width: 100%; display: block; }
-        .selfie-preview { width: 100%; max-width: 180px; height: auto; border: 2px solid #4caf50; border-radius: 8px; display: none; margin: 5px auto; }
+        /* Camera, Selfie and Sign Pad Styling */
+        .camera-box { border: 2px solid #0288d1; border-radius: 10px; overflow: hidden; background: #000; position: relative; max-width: 320px; margin: 0 auto 10px auto; }
+        .camera-box video { width: 100%; display: block; transform: scaleX(-1); /* Mirror view for natural feel */ }
+        .selfie-preview { width: 100%; max-width: 240px; height: auto; border: 3px dashed #4caf50; border-radius: 8px; display: none; margin: 5px auto; transform: scaleX(-1); }
         .signature-pad-container { border: 2px solid #0288d1; border-radius: 8px; background-color: #fff; position: relative; margin-top: 10px; }
         .signature-pad-container canvas { width: 100%; height: 150px; display: block; cursor: crosshair; }
         .clear-btn { background-color: #e53935; color: white; border: none; padding: 5px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; margin-top: 5px; font-weight: bold; }
-        .cam-btn { background: #0288d1; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; display: block; margin: 5px auto; }
+        .cam-btn { background: #0288d1; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; display: block; margin: 5px auto; }
 
         .submit-btn { 
             width: 100%; 
@@ -280,7 +280,7 @@
         <div class="section-title">3. TERMS & CONDITIONS (नियम एवं शर्तें) 📝</div>
         <div class="rules-container">
             <div class="rule-item"><strong>1.</strong> I / We acknowledge that there is <strong>NO LIFE GUARD ON DUTY</strong> at the swimming pool.<br><span class="hindi-text">मैं / हम स्वीकार करते हैं कि स्विमिंग पूल पर कोई लाइफ गार्ड तैनात नहीं है।</span></div>
-            <div class="rule-item"><strong>2.</strong> I / We understand that swimming and pool activities involve inherent risks, including the risk of serious injury or death, and I / We allow my / our child named above to use the swimming pool facilities at our own risk.<br><span class="hindi-text">मैं / हम समझते हैं कि स्विमिंग और पूल गतिविधियों में अंतर्निहित जोखिम शामिल हैं, जिनमें गंभीर चोट या मृत्यु का जोखिम भी शामिल है, और मैं / हम अपने उपर्युक्त बच्चे को स्विमिंग पूल की सुविधाओं का उपयोग अपने स्वयं के जोखिम पर करने की अनुमति देते हैं।</span></div>
+            <div class="rule-item"><strong>2.</strong> I / We understand that swimming and pool activities involve inherent risks, including the risk of serious injury or death, and I / We allow my / our child named above to use the swimming pool facilities at our own risk.<br><span class="hindi-text">मैं / हम समझते हैं कि स्विमिंग और पूल गतिविधियों में अंतर्निहित जोखिम शामिल हैं, जिनमें गंभीर चोट या मृत्यु का जोखिम भी शामिल है, and I / We allow my / our child named above to use the swimming pool facilities at our own risk.</span></div>
             <div class="rule-item"><strong>3.</strong> I / We agree that the RWA Committee and PAAS SIKAR LOGISTICS LLP, its partners, employees, agents or representatives shall not be liable for any accident, injury, illness, drowning or loss of life arising out of or in connection with the use of the swimming pool.<br><span class="hindi-text">मैं / हम सहमत हैं कि RWA समिति और PAAS SIKAR LOGISTICS LLP, उसके साझेदारों, कर्मचारियों, एजेंटों या प्रतिनिधियों को स्विमिंग पूल के उपयोग से संबंधित या उससे उत्पन्न किसी भी दुर्घटना, चोट, बीमारी, डूबने या जीवन की हानि के लिए उत्तरदायी नहीं ठहराया जाएगा।</span></div>
             <div class="rule-item"><strong>4.</strong> I / We shall ensure that my / our child follows all the pool rules and instructions displayed at the premises and behaves responsibly at all times. We also agree that RWA Committee and PAAS SIKAR LOGISTICS LLP shall not be liable for any incident.<br><span class="hindi-text">मैं / हम सुनिश्चित करेंगे कि मेरा / हमारा बच्चा परिसर में प्रदर्शित सभी पूल नियमों और निर्देशों का पालन करे और हर समय जिम्मेदारी से व्यवहार करे। हम यह भी सहमत हैं कि RWA समिति और PAAS SIKAR LOGISTICS LLP किसी भी घटना के लिए उत्तरदायी नहीं होंगे।</span></div>
             <div class="rule-item"><strong>5.</strong> I / We agree to indemnify and hold harmless the RWA Committee and PAAS SIKAR LOGISTICS LLP, its partners, employees, agents or representatives from any claim, damage, liability or expense arising out of the use of the swimming pool by my / our child.<br><span class="hindi-text">मैं / हम सहमत हैं कि मेरे / हमारे बच्चे द्वारा स्विमिंग पूल के उपयोग से उत्पन्न किसी भी दावा, क्षति, देयता या खर्च से RWA समिति और PAAS SIKAR LOGISTICS LLP, उसके साझेदारों, कर्मचारियों, एजेंटों या प्रतिनिधियों को क्षतिपूर्ति देंगे और उन्हें हानिरहित रखेंगे।</span></div>
@@ -344,7 +344,7 @@
     let selfieDataUrl1 = null;
     let selfieDataUrl2 = null;
 
-    // --- 2. Live Camera Init Logic ---
+    // --- 2. Live Camera Implementation Logic (FIXED) ---
     let stream1 = null, stream2 = null;
     async function initCamera(camNum, videoId) {
         try {
@@ -354,27 +354,56 @@
             if(camNum === 2) stream2 = stream;
         } catch (err) {
             console.error("Camera access error: ", err);
+            alert("कैमरा लोड करने में असमर्थ। कृपया कैमरा परमिशन एलाउ (Allow) करें।");
         }
     }
 
+    // डिफ़ॉल्ट रूप से पहला कैमरा लोड करें
     initCamera(1, 'video_1');
 
+    // सेल्फी क्लिक और रीटेक का वर्किंग फ़ंक्शन
     function captureSelfie(camNum) {
         const video = document.getElementById(`video_${camNum}`);
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const preview = document.getElementById(`preview_${camNum}`);
+        const camBox = document.getElementById(`cam_box_${camNum}`);
+        const btn = document.getElementById(`snap_btn_${camNum}`);
+
+        // अगर यूजर रीटेक (Retake) करना चाहता है
+        if (btn.innerHTML.includes("Retake")) {
+            preview.style.display = 'none';
+            camBox.style.display = 'block';
+            btn.innerHTML = "📸 Capture Selfie";
+            if (camNum === 1) selfieDataUrl1 = null;
+            if (camNum === 2) selfieDataUrl2 = null;
+            initCamera(camNum, `video_${camNum}`);
+            return;
+        }
+
+        // इमेज कैप्चर प्रोसेस
+        const canvasElement = document.createElement('canvas');
+        canvasElement.width = video.videoWidth || 640;
+        canvasElement.height = video.videoHeight || 480;
+        const ctx2d = canvasElement.getContext('2d');
         
-        const dataUrl = canvas.toDataURL('image/jpeg');
-        document.getElementById(`preview_${camNum}`).src = dataUrl;
-        document.getElementById(`preview_${camNum}`).style.display = 'block';
-        document.getElementById(`cam_box_${camNum}`).style.display = 'none';
-        document.getElementById(`snap_btn_${camNum}`).innerHTML = "🔄 Retake Selfie";
+        // सेल्फी मिरर फ्लिप फिक्स रेंडरिंग
+        ctx2d.translate(canvasElement.width, 0);
+        ctx2d.scale(-1, 1);
+        ctx2d.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
         
-        if(camNum === 1) { selfieDataUrl1 = dataUrl; }
-        if(camNum === 2) { selfieDataUrl2 = dataUrl; }
+        const dataUrl = canvasElement.toDataURL('image/jpeg', 0.9);
+        preview.src = dataUrl;
+        preview.style.display = 'block';
+        camBox.style.display = 'none';
+        btn.innerHTML = "🔄 Retake Selfie";
+        
+        if(camNum === 1) { 
+            selfieDataUrl1 = dataUrl;
+            if (stream1) stream1.getTracks().forEach(track => track.stop()); // रोकने पर कैमरा बंद
+        }
+        if(camNum === 2) { 
+            selfieDataUrl2 = dataUrl;
+            if (stream2) stream2.getTracks().forEach(track => track.stop());
+        }
     }
 
     // --- 3. Digital Signature Drawing Logic ---
@@ -464,7 +493,7 @@
         }
     }
 
-    // --- 5. Check Age & Enforce Restriction with Pop-up Alert Box ---
+    // --- 5. Check Age & Enforce Restriction ---
     function getAgeFromDOB(dobValue) {
         if(!dobValue) return 0;
         const dob = new Date(dobValue); const today = new Date();
@@ -484,13 +513,11 @@
         const submitBtn = document.getElementById('submitBtn');
         const errorBox = document.getElementById('age_restriction_error');
         
-        // यदि उम्र 12 वर्ष या उससे कम है तो पॉप-अप अलर्ट दिखाएं और ब्लॉक करें
         if (age <= 12) {
             errorBox.style.display = 'block';
             submitBtn.disabled = true;
             parentSection.style.display = 'none';
             
-            // नया डायनेमिक पॉप-अप अलर्ट मैसेज जैसा आपने निर्देशित किया था
             alert("❌ Restriction Alert:\nOnline form filling is restricted for children aged 12 years or below. Please fill the physical form available at the swimming pool supervisor.");
             
             if(stream1) stream1.getTracks().forEach(t => t.stop());
@@ -736,12 +763,12 @@
 
                     <div style="text-align: center; margin-bottom: 15px;">
                         <div style="display: inline-block; margin: 0 10px; text-align: center;">
-                            <img src="${selfieDataUrl1}" style="width: 110px; height: 110px; border: 1px solid #003399; object-fit: cover; border-radius: 4px;">
+                            <img src="${selfieDataUrl1}" style="width: 110px; height: 110px; border: 1px solid #003399; object-fit: cover; border-radius: 4px; transform: scaleX(-1);">
                             <span style="font-size: 10px; display: block; font-weight: bold; color: #003399; margin-top:2px;">Resident / Minor Selfie</span>
                         </div>
                         ${age < 18 ? `
                         <div style="display: inline-block; margin: 0 10px; text-align: center;">
-                            <img src="${selfieDataUrl2}" style="width: 110px; height: 110px; border: 1px solid #2e7d32; object-fit: cover; border-radius: 4px;">
+                            <img src="${selfieDataUrl2}" style="width: 110px; height: 110px; border: 1px solid #2e7d32; object-fit: cover; border-radius: 4px; transform: scaleX(-1);">
                             <span style="font-size: 10px; display: block; font-weight: bold; color: #2e7d32; margin-top:2px;">Parent / Guardian Selfie</span>
                         </div>
                         ` : ''}
