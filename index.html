@@ -74,7 +74,7 @@
             transition: all 0.3s ease;
         }
         .form-group input:focus, .form-group select:focus { border-color: #0288d1; outline: none; }
-        .form-group select:disabled { background-color: #e9ecef; cursor: not-allowed; border-color: #ccc; }
+        .form-group select:disabled, .form-group input:disabled { background-color: #e9ecef; cursor: not-allowed; border-color: #ccc; color: #555; }
         
         .file-upload-box { border: 2px dashed #0288d1; padding: 15px; text-align: center; border-radius: 8px; background-color: #e1f5fe; }
         .file-upload-box.parent-upload { border-color: #e65100; background-color: #fff3e0; }
@@ -150,10 +150,10 @@
         
         <div class="form-group">
             <label>Today's Date / आज की दिनांक <span style="color:red;">*</span></label>
-            <input type="date" id="date" required readonly style="background-color: #eeeeee;">
+            <input type="date" id="date" required disabled style="background-color: #eeeeee;">
         </div>
 
-        <div class="section-title">1. RESIDENT DETAILS 👤</div>
+        <div class="section-title">1. CHILD / RESIDENT DETAILS 👤</div>
         <div class="grid-2">
             <div class="form-group">
                 <label>Full Name (पूरा नाम) <span style="color:red;">*</span></label>
@@ -203,33 +203,35 @@
             <div class="section-title parent-bg">PARENTS / GUARDIAN DETAILS 👨‍👩‍👦 <span style="color:white;">*</span></div>
             <div class="grid-2">
                 <div class="form-group">
-                    <label>Father's / Guardian Name <span style="color:red;">*</span></label>
-                    <input type="text" id="father_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                    <label>Parent / Guardian Name (माता-पिता / अभिभावक का नाम) <span style="color:red;">*</span></label>
+                    <input type="text" id="father_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="Enter Guardian Name">
                 </div>
                 <div class="form-group">
-                    <label>Mother's Name <span style="color:red;">*</span></label>
-                    <input type="text" id="mother_name" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                    <label>Relation with Minor Child (संबंध) <span style="color:red;">*</span></label>
+                    <select id="parent_relation" class="parent-input" onchange="toggleOtherRelation()">
+                        <option value="">Select Relation</option>
+                        <option value="Father">Father (पिता)</option>
+                        <option value="Mother">Mother (माता)</option>
+                        <option value="Grandfather">Grandfather (दादा)</option>
+                        <option value="Grandmother">Grandmother (दादी)</option>
+                        <option value="Uncle">Uncle (चाचा)</option>
+                        <option value="Aunt">Aunt (चाची)</option>
+                        <option value="Other">Other (अन्य)</option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Relation with Minor Child (संबंध) <span style="color:red;">*</span></label>
-                <select id="parent_relation" class="parent-input">
-                    <option value="">Select Relation</option>
-                    <option value="Father">Father (पिता)</option>
-                    <option value="Mother">Mother (माता)</option>
-                    <option value="Grandfather">Grandfather (दादा)</option>
-                    <option value="Grandmother">Grandmother (दादी)</option>
-                    <option value="Uncle">Uncle (चाचा)</option>
-                    <option value="Aunt">Aunt (चाची)</option>
-                    <option value="Other">Other (अन्य)</option>
-                </select>
+            
+            <div class="form-group" id="other_relation_box" style="display: none;">
+                <label>Please Specify Relation / कृपया संबंध बताएं <span style="color:red;">*</span></label>
+                <input type="text" id="other_relation_input" class="parent-input" oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')" placeholder="e.g. Legal Guardian, Brother etc.">
             </div>
+
             <div class="form-group">
-                <label>Parent's Mobile No. <span style="color:red;">*</span></label>
+                <label>Parent / Guardian Mobile No. (OTP Verification Area) <span style="color:red;">*</span></label>
                 <input type="tel" id="parent_mobile" class="parent-input" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Number">
             </div>
             <div class="form-group file-upload-box parent-upload">
-                <label style="color: #e65100;">Upload Parent's ID Proof <span style="color:red;">*</span></label>
+                <label style="color: #e65100;">Upload Parent / Guardian ID Proof <span style="color:red;">*</span></label>
                 <input type="file" id="parent_id_proof" class="parent-input" accept="image/png, image/jpeg, application/pdf">
             </div>
         </div>
@@ -237,7 +239,7 @@
         <div class="section-title">3. CONTACT DETAILS 📞</div>
         <div class="grid-2">
             <div class="form-group">
-                <label>Mobile No. (OTP Verification) <span style="color:red;">*</span></label>
+                <label>Mobile No. <span style="color:red;">*</span></label>
                 <input type="tel" id="mobile" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="10 Digit Mobile No" required>
             </div>
             <div class="form-group">
@@ -307,10 +309,8 @@
     const storage = firebase.storage();
     const auth = firebase.auth();
 
-    // Hostname dynamic config fix to bypass the 'Hostname match not found' error
-    auth.config.authDomain = window.location.hostname;
-
-    document.getElementById('date').valueAsDate = new Date();
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = todayStr;
 
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
         'size': 'invisible',
@@ -365,13 +365,28 @@
         const parentSection = document.getElementById('parent_section');
         const parentInputs = document.querySelectorAll('.parent-input');
         
-        if (age < 13) {
-            parentSection.style.display = 'block';
-        } else if (age >= 13 && age < 18) {
+        if (age < 18) {
             parentSection.style.display = 'block';
         } else {
             parentSection.style.display = 'none';
             parentInputs.forEach(input => { input.value = ''; });
+            document.getElementById('other_relation_box').style.display = 'none';
+        }
+    }
+
+    // 1. Toggle Function for "Other" relation option
+    function toggleOtherRelation() {
+        const relationSelect = document.getElementById('parent_relation').value;
+        const otherBox = document.getElementById('other_relation_box');
+        const otherInput = document.getElementById('other_relation_input');
+        
+        if (relationSelect === 'Other') {
+            otherBox.style.display = 'block';
+            otherInput.required = true;
+        } else {
+            otherBox.style.display = 'none';
+            otherInput.required = false;
+            otherInput.value = '';
         }
     }
 
@@ -411,11 +426,22 @@
         if (!validMobileRegex.test(emMobile)) { alert("⚠ Error: Invalid Emergency Mobile Number."); return; }
 
         let age = getAgeFromDOB(dob);
-        if (age < 18) {
+        let finalVerificationMobile = mobile; // Default Target
+        let isMinorMode = age < 18;
+
+        if (isMinorMode) {
             const fName = document.getElementById('father_name').value.trim();
             const pMobile = document.getElementById('parent_mobile').value.trim();
             const pRelation = document.getElementById('parent_relation').value;
+            
             if (!fName || !pMobile || !pRelation) { alert("⚠ Error: Parent/Guardian details missing."); return; }
+            if (!validMobileRegex.test(pMobile)) { alert("⚠ Error: Invalid Parent Mobile Number."); return; }
+            if (pRelation === 'Other' && !document.getElementById('other_relation_input').value.trim()) {
+                alert("⚠ Error: Please specify the relation."); return;
+            }
+            
+            // 2. Minor Mode active: Change final OTP routing target to parent mobile
+            finalVerificationMobile = pMobile;
         }
 
         if (name.toLowerCase() !== signature.toLowerCase()) {
@@ -424,28 +450,34 @@
 
         const submitBtn = document.getElementById('submitBtn');
         submitBtn.innerHTML = "Sending OTP... ⏳";
-        submitBtn.disabled = true;
-
-        const phoneNumber = "+91" + mobile;
-        const appVerifier = window.recaptchaVerifier;
-
-        auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-            .then((result) => {
-                confirmationResult = result;
-                alert("📲 OTP sent successfully to " + mobile);
-                
-                var otpBox = document.getElementById('otpSection');
-                if(otpBox) {
-                    otpBox.style.setProperty('display', 'block', 'important');
-                    otpBox.scrollIntoView({ behavior: 'smooth' });
-                }
-                submitBtn.innerHTML = "OTP Sent ✅ (Complete verification below)";
-            }).catch((error) => {
-                console.error("OTP Error: ", error);
-                alert("❌ Failed to send OTP: " + error.message);
-                submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
-                submitBtn.disabled = false;
-            });
+        
+        const phoneNumber = "+91" + finalVerificationMobile;
+        window.recaptchaVerifier.render().then(function(widgetId) {
+            auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    
+                    // 2. Dynamic alert texts depending on destination routing
+                    if(isMinorMode) {
+                        alert("📲 OTP sent successfully to Parent Mobile Number: " + finalVerificationMobile);
+                        submitBtn.innerHTML = "OTP Sent to Parent Mobile ✅";
+                    } else {
+                        alert("📲 OTP sent successfully to " + finalVerificationMobile);
+                        submitBtn.innerHTML = "OTP Sent ✅ (Complete verification below)";
+                    }
+                    
+                    var otpBox = document.getElementById('otpSection');
+                    if(otpBox) {
+                        otpBox.style.setProperty('display', 'block', 'important');
+                        otpBox.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }).catch((error) => {
+                    console.error("OTP Error: ", error);
+                    alert("❌ Failed to send OTP: " + error.message);
+                    submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
+                    grecaptcha.reset(widgetId);
+                });
+        });
     }
 
     // --- 6. Verify OTP ---
@@ -470,7 +502,7 @@
         });
     }
 
-    // --- 7. Final Form Submission & Image Style Matching PDF Generation ---
+    // --- 7. Final Form Submission & Matching PDF Generation ---
     async function executeFinalFormSubmission() {
         const name = document.getElementById('name').value.trim();
         const dob = document.getElementById('dob').value;
@@ -482,14 +514,18 @@
         const emMobile = document.getElementById('em_mobile').value.trim();
         const idProofInput = document.getElementById('id_proof');
         const idProofFile = idProofInput.files[0];
-        const currentDate = document.getElementById('date').value;
+        
+        const currentDate = new Date().toISOString().split('T')[0];
 
         let age = getAgeFromDOB(dob);
         let parentFileURL = "";
         let fatherName = document.getElementById('father_name').value.trim() || "N/A";
-        let motherName = document.getElementById('mother_name').value.trim() || "N/A";
         let parentMobile = document.getElementById('parent_mobile').value.trim() || "N/A";
         let parentRelation = document.getElementById('parent_relation').value || "N/A";
+        
+        if(parentRelation === 'Other') {
+            parentRelation = document.getElementById('other_relation_input').value.trim() || "Other";
+        }
         
         const submitBtn = document.getElementById('submitBtn');
 
@@ -522,8 +558,7 @@
                 mobile: mobile,
                 emergency_contact: emName,
                 emergency_mobile: emMobile,
-                father_name: fatherName,
-                mother_name: motherName,
+                guardian_name: fatherName,
                 parent_mobile: parentMobile,
                 parent_relation: parentRelation,
                 id_proof_url: fileURL,
@@ -531,9 +566,8 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            submitBtn.innerHTML = "3/3 Generating PDF... 📄";
+            submitBtn.innerHTML = "3/3 Generating PDF... ⏳";
             
-            // Image design rules layout implementation for Mobile PDF
             const pdfHtmlContent = `
                 <div style="padding: 20px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #111; background: #fff; max-width: 750px; margin: 0 auto; box-sizing: border-box; border: 3px solid #003399; border-radius: 10px;">
                     
@@ -579,15 +613,12 @@
                     </div>
                     <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px; line-height: 1.7;">
                         <tr>
-                            <td style="padding: 5px; width: 50%;"><strong>Father / Guardian Name:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${fatherName}</span></td>
-                            <td style="padding: 5px; width: 50%;"><strong>Mother Name:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${motherName}</span></td>
+                            <td style="padding: 5px; width: 50%;"><strong>Parent / Guardian Name:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${fatherName}</span></td>
+                            <td style="padding: 5px; width: 50%;"><strong>Relation (संबंध):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentRelation}</span></td>
                         </tr>
                         <tr>
-                            <td style="padding: 5px;"><strong>Relation (संबंध):</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentRelation}</span></td>
                             <td style="padding: 5px;"><strong>Parent Mobile No:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${parentMobile}</span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 5px;" colspan="2"><strong>Emergency Contact Person:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${emName} (${emMobile})</span></td>
+                            <td style="padding: 5px;"><strong>Emergency Contact:</strong> <span style="border-bottom: 1px solid #222; padding-bottom:1px;">${emName} (${emMobile})</span></td>
                         </tr>
                     </table>
 
@@ -639,7 +670,6 @@
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } 
             };
             
-            // Generate PDF directly via String
             await html2pdf().set(opt).from(pdfHtmlContent).save();
 
             // Show Success UI
@@ -652,7 +682,6 @@
             console.error("Error: ", error);
             alert(`Error: ${error.message}`);
             submitBtn.innerHTML = "🏊‍♂️ Submit Consent Form 🌊";
-            submitBtn.disabled = false;
             document.querySelector("#otpSection button").disabled = false;
         }
     }
