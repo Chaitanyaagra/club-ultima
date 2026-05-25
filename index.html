@@ -86,6 +86,9 @@
         .warning-box h3 { color: #d32f2f; margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
         .warning-box p { margin: 5px 0; font-size: 13px; font-weight: bold; color: #333; }
         
+        /* Restriction Error Box */
+        #age_restriction_error { display: none; background-color: #ffebee; border: 2px solid #d32f2f; color: #c62828; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 14px; margin: 15px 0; text-align: center; }
+
         .rules-container { background-color: #fafafa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; max-height: 250px; overflow-y: scroll; margin-bottom: 20px; font-size: 12px; line-height: 1.6; }
         .rule-item { margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
         .rule-item strong { color: #d32f2f; }
@@ -96,7 +99,6 @@
         .checkbox-container label { font-size: 13px; font-weight: bold; cursor: pointer; color: #33691e; }
         .hindi-text { color: #555; display: block; margin-top: 2px; font-size: 11px; font-weight: normal;}
         
-        /* Camera & Signature Elements Style */
         .camera-box { border: 2px solid #0288d1; border-radius: 10px; overflow: hidden; background: #000; position: relative; margin-bottom: 10px; max-width: 320px; margin: 0 auto 10px auto; }
         .camera-box video { width: 100%; display: block; }
         .selfie-preview { width: 100%; max-width: 180px; height: auto; border: 2px solid #4caf50; border-radius: 8px; display: none; margin: 5px auto; }
@@ -151,6 +153,12 @@
         <p>📄 एक पीडीएफ रसीद आपके डिवाइस पर डाउनलोड हो गई है।</p>
         <p class="hindi-text">कृपया भविष्य के संदर्भ के लिए इस आईडी को सुरक्षित रखें।</p>
         <button onclick="location.reload()" class="submit-btn" style="width: auto; padding: 12px 25px; border-radius: 20px;">दूसरा फॉर्म भरें</button>
+    </div>
+
+    <div id="age_restriction_error">
+        ⚠️ आयु प्रतिबंध त्रुटि (Age Restriction Error):<br>
+        Online form filling is restricted for children aged 12 years or below. Please contact the swimming pool supervisor for a physical form.<br>
+        <span style="font-weight: normal; font-size:12px; display:block; margin-top:5px;">12 वर्ष या उससे कम आयु के बच्चों के लिए ऑनलाइन फॉर्म भरना प्रतिबंधित है। कृपया स्विमिंग पूल सुपरवाइजर से भौतिक (फिजिकल) फॉर्म प्राप्त करें।</span>
     </div>
 
     <div id="recaptcha-container"></div>
@@ -346,11 +354,9 @@
             if(camNum === 2) stream2 = stream;
         } catch (err) {
             console.error("Camera access error: ", err);
-            alert("कैमरा एक्सेस करने में समस्या है। कृपया ब्राउज़र अनुमति की जांच करें।");
         }
     }
 
-    // ऑटोमेटिकली प्राइमरी कैमरा लोड करें
     initCamera(1, 'video_1');
 
     function captureSelfie(camNum) {
@@ -376,7 +382,6 @@
     const ctx = canvas.getContext('2d');
     let drawing = false;
 
-    // रीसाइजिंग और स्केल फिक्स
     function resizeCanvas() {
         const ratio = Math.max(window.devicePixelRatio || 1, 1);
         canvas.width = canvas.offsetWidth * ratio;
@@ -402,6 +407,32 @@
         const pos = getMousePos(e);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
+    }
+
+    // --- 4. Populate Flats Dynamic Logic ---
+    function populateFlats() {
+        const tower = document.getElementById("tower").value;
+        const flatSelect = document.getElementById("flat");
+        flatSelect.innerHTML = '<option value="">Select Flat (फ्लैट चुनें)</option>';
+        if (!tower) { flatSelect.disabled = true; return; }
+        flatSelect.disabled = false;
+        
+        let prefix = '', maxFloor = 13, flatsPerFloor = 6;
+        switch (tower) {
+            case 'Tower A': case 'Tower B': prefix = 'A'; break;
+            case 'Tower C': case 'Tower D': prefix = 'C'; flatsPerFloor = 4; break;
+            case 'Tower E': prefix = 'E'; flatsPerFloor = 5; break;
+            case 'Tower F': case 'Tower G': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
+        }
+        for (let floor = 0; floor <= maxFloor; floor++) {
+            for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
+                let flatStr = flatNum.toString().padStart(2, '0'); 
+                let finalFlat = prefix + floor.toString() + flatStr; 
+                let option = document.createElement("option");
+                option.value = finalFlat; option.text = finalFlat;
+                flatSelect.appendChild(option);
+            }
+        }
     }
 
     function draw(e) {
@@ -433,33 +464,7 @@
         return canvas.toDataURL() === blank.toDataURL();
     }
 
-    // --- 4. Dynamic Flat Logic ---
-    function populateFlats() {
-        const tower = document.getElementById("tower").value;
-        const flatSelect = document.getElementById("flat");
-        flatSelect.innerHTML = '<option value="">Select Flat (फ्लैट चुनें)</option>';
-        if (!tower) { flatSelect.disabled = true; return; }
-        flatSelect.disabled = false;
-        
-        let prefix = '', maxFloor = 13, flatsPerFloor = 6;
-        switch (tower) {
-            case 'Tower A': case 'Tower B': prefix = 'A'; break;
-            case 'Tower C': case 'Tower D': prefix = 'C'; flatsPerFloor = 4; break;
-            case 'Tower E': prefix = 'E'; flatsPerFloor = 5; break;
-            case 'Tower F': case 'Tower G': prefix = 'F'; maxFloor = 12; flatsPerFloor = 4; break;
-        }
-        for (let floor = 0; floor <= maxFloor; floor++) {
-            for (let flatNum = 1; flatNum <= flatsPerFloor; flatNum++) {
-                let flatStr = flatNum.toString().padStart(2, '0'); 
-                let finalFlat = prefix + floor.toString() + flatStr; 
-                let option = document.createElement("option");
-                option.value = finalFlat; option.text = finalFlat;
-                flatSelect.appendChild(option);
-            }
-        }
-    }
-
-    // --- 5. Check Age ---
+    // --- 5. Check Age & Enforce Restriction with Pop-up Message ---
     function getAgeFromDOB(dobValue) {
         if(!dobValue) return 0;
         const dob = new Date(dobValue); const today = new Date();
@@ -473,13 +478,33 @@
         const dobInput = document.getElementById('dob').value;
         if(!dobInput) return;
         let age = getAgeFromDOB(dobInput);
+        
         const parentSection = document.getElementById('parent_section');
         const parentInputs = document.querySelectorAll('.parent-input');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorBox = document.getElementById('age_restriction_error');
         
-        if (age < 18) {
+        // यदि उम्र 12 वर्ष या उससे कम है तो पॉप-अप अलर्ट दिखाएं और फॉर्म ब्लॉक करें
+        if (age <= 12) {
+            errorBox.style.display = 'block';
+            submitBtn.disabled = true;
+            parentSection.style.display = 'none';
+            
+            // नया अलर्ट पॉप-अप जो फिजिकल फॉर्म भरने की सलाह देता है
+            alert("❌ Restriction Alert:\nOnline form registration is blocked for children aged 12 years or below. Kindly fill the physical form available at the swimming pool supervisor.");
+            
+            if(stream1) stream1.getTracks().forEach(t => t.stop());
+            if(stream2) stream2.getTracks().forEach(t => t.stop());
+            return;
+        } 
+        
+        errorBox.style.display = 'none';
+        submitBtn.disabled = false;
+
+        if (age >= 13 && age < 18) {
             parentSection.style.display = 'block';
             document.getElementById('selfie_label').innerHTML = "Take Minor Live Selfie / बच्चे की लाइव सेल्फी लें <span style='color:red;'>*</span>";
-            initCamera(2, 'video_2'); // पैरेंट का कैमरा चालू करें
+            initCamera(2, 'video_2');
         } else {
             parentSection.style.display = 'none';
             document.getElementById('selfie_label').innerHTML = "Take Live Selfie / लाइव सेल्फी लें <span style='color:red;'>*</span>";
@@ -525,6 +550,12 @@
         const idProofInput = document.getElementById('id_proof');
         const idProofFile = idProofInput.files.length > 0 ? idProofInput.files[0] : null;
 
+        let age = getAgeFromDOB(dob);
+        if (age <= 12) {
+            alert("❌ Submission Denied: 12 years or below must fill the physical form.");
+            return;
+        }
+
         if (!name || !dob || !tower || !flat || !gender || !mobile) {
             alert("⚠ Error: Please fill all mandatory fields."); return;
         }
@@ -536,9 +567,8 @@
         const validMobileRegex = /^[06789]\d{9}$/;
         if (!validMobileRegex.test(mobile)) { alert("⚠ Error: Invalid Mobile Number."); return; }
 
-        let age = getAgeFromDOB(dob);
         let finalVerificationMobile = mobile;
-        let isMinorMode = age < 18;
+        let isMinorMode = age >= 13 && age < 18;
 
         if (isMinorMode) {
             const fName = document.getElementById('father_name').value.trim();
@@ -617,7 +647,7 @@
         const idProofFile = idProofInput.files[0];
         
         const currentDate = new Date().toISOString().split('T')[0];
-        const signatureImgBase64 = canvas.toDataURL(); // सिग्नेचर इमेज डेटा
+        const signatureImgBase64 = canvas.toDataURL();
 
         let age = getAgeFromDOB(dob);
         let parentFileURL = "";
@@ -637,25 +667,21 @@
             const newFormID = generateUniqueID(); 
             submitBtn.innerHTML = "1/3 Uploading Data... ⏳";
 
-            // 1. Upload ID Proof
             const storageRef = storage.ref(`id_proofs/${newFormID}_${idProofFile.name}`);
             const snapshot = await storageRef.put(idProofFile);
             const fileURL = await snapshot.ref.getDownloadURL();
 
-            // 2. Upload Live Selfie 1
             const selfieRef1 = storage.ref(`selfies/${newFormID}_resident.jpg`);
             const selfieSnap1 = await selfieRef1.putString(selfieDataUrl1, 'data_url');
             selfieUrl1 = await selfieSnap1.ref.getDownloadURL();
 
             if (age < 18) {
-                // Upload Parent ID Proof
                 const pIdProofFile = document.getElementById('parent_id_proof').files[0];
                 if(pIdProofFile) {
                     const pStorageRef = storage.ref(`parent_id_proofs/${newFormID}_${pIdProofFile.name}`);
                     const pSnapshot = await pStorageRef.put(pIdProofFile);
                     parentFileURL = await pSnapshot.ref.getDownloadURL();
                 }
-                // Upload Parent Selfie
                 const selfieRef2 = storage.ref(`selfies/${newFormID}_parent.jpg`);
                 const selfieSnap2 = await selfieRef2.putString(selfieDataUrl2, 'data_url');
                 selfieUrl2 = await selfieSnap2.ref.getDownloadURL();
@@ -683,11 +709,9 @@
 
             submitBtn.innerHTML = "3/3 Generating PDF... ⏳";
 
-            // कैमरे के ट्रैक बंद करें
             if(stream1) stream1.getTracks().forEach(t => t.stop());
             if(stream2) stream2.getTracks().forEach(t => t.stop());
             
-            // सेल्फ़ियों के रेंडरिंग के साथ इमेज लेआउट मैचिंग पीडीएफ
             const pdfHtmlContent = `
                 <div style="padding: 20px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #111; background: #fff; max-width: 750px; margin: 0 auto; box-sizing: border-box; border: 3px solid #003399; border-radius: 10px;">
                     
@@ -773,8 +797,8 @@
                     </div>
 
                     <div style="border-top: 2px solid #003399; padding-top: 10px; margin-top: 15px;">
-                        <p style="font-size: 10.5px; line-height: 1.4; color: #333; font-style: italic; margin: 0 0 10px 0;">
-                            <strong>DECLARATION (घोषणा):</strong> I / We have read and understood the terms. I voluntarily give consent to use swimming pool facilities at our own risk. (ने ऊपर दी गई सभी नियम एवं शर्तों को पढ़ा और समझा है। मैं स्वेच्छा से सहमति प्रदान करता हूँ।)
+                        <p style="font-size: 10.5px; line-height: 1.4; color: #333; font-style: italic; margin: 0 0 15px 0;">
+                            <strong>DECLARATION (घोषणा):</strong> I / We have read and understood the terms. I voluntarily give consent to use swimming pool facilities at our own risk. (मैंने ऊपर दी गई सभी नियम एवं शर्तों को पढ़ा और समझा है। मैं स्वेच्छा से सहमति प्रदान करता हूँ।)
                         </p>
                         
                         <table style="width: 100%; font-size: 12px;">
